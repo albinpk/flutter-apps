@@ -1,0 +1,12 @@
+name: "000-todo"
+
+on:
+  push:
+    paths:
+      - "000-todo/**"
+
+jobs:
+  build:
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
+    with:
+      working_directory: "000-todo"
