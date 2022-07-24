@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../todo/todo.dart';
+import '../../services/services.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -9,7 +9,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Todo',
-      home: TodoPage(),
+      onGenerateRoute: AppRouter.onGenerate,
     );
   }
 }
