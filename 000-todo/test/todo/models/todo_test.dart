@@ -3,9 +3,14 @@ import 'package:todo/todo/models/models.dart';
 
 void main() {
   group('Todo model', () {
-    test('should have an id', () {
+    test('should generate id if no id given', () {
       final todo = Todo(title: 'title');
       expect(todo.id, isNotEmpty);
+    });
+
+    test('should have given id', () {
+      final todo = Todo(id: '123', title: 'title');
+      expect(todo.id, equals('123'));
     });
 
     test('should have given title', () {
