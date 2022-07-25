@@ -6,7 +6,8 @@ class Todo {
   final bool isDone;
 
   Todo({
+    String? id,
     required this.title,
     this.isDone = false,
-  }) : id = const Uuid().v4();
+  }) : id = id ?? const Uuid().v4();
 }
