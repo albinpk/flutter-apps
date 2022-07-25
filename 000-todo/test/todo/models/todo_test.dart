@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:todo/todo/models/models.dart';
 
@@ -29,6 +31,28 @@ void main() {
 
       expect(todo1.isDone, isTrue);
       expect(todo2.isDone, isFalse);
+    });
+
+    group('json', () {
+      test('toJson', () {
+        final todo = Todo(id: '123', title: 'todo1', isDone: true);
+        final todoJson = jsonEncode({
+          'id': '123',
+          'title': 'todo1',
+          'isDone': true,
+        });
+        expect(todo.toJson(), equals(todoJson));
+      });
+
+      test('fromJson', () {
+        final todoJson = jsonEncode({
+          'id': '123',
+          'title': 'todo1',
+          'isDone': true,
+        });
+        final todo = Todo(id: '123', title: 'todo1', isDone: true);
+        expect(Todo.fromJson(todoJson), equals(todo));
+      });
     });
   });
 }
