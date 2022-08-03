@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../cubit/todo_cubit.dart';
 import '../models/models.dart';
 
 class TodoItem extends StatelessWidget {
@@ -23,7 +25,9 @@ class TodoItem extends StatelessWidget {
         style: style,
       ),
       controlAffinity: ListTileControlAffinity.leading,
-      onChanged: (_) {},
+      onChanged: (_) {
+        context.read<TodoCubit>().toggleIsDone(todo);
+      },
     );
   }
 }
