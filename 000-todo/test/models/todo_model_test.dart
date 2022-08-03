@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:todo/todo/models/models.dart';
+import 'package:todo/models/models.dart';
 
 void main() {
   group('Todo model', () {

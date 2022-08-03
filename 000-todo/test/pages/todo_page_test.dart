@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:todo/todo/todo.dart';
+import 'package:todo/pages/pages.dart';
 
 void main() {
   testWidgets('TodoPage should have a Scaffold ', (tester) async {
