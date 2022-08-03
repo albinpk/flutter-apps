@@ -10,7 +10,7 @@ class TodoCubit extends Cubit<TodoState> {
 
   void addTodo(Todo todo) {
     emit(
-      TodoChangeState(todos: [...state.todos, todo]),
+      TodoChangeState(todos: [todo, ...state.todos]),
     );
   }
 
