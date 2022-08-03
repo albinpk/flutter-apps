@@ -54,5 +54,34 @@ void main() {
         expect(Todo.fromJson(todoJson), equals(todo));
       });
     });
+
+    group('copyWith', () {
+      test('should not replace [id]', () {
+        final todo = Todo(title: 'title');
+        final newTodo = todo.copyWith(
+          title: 'new title',
+          isDone: true,
+        );
+        expect(newTodo.id, todo.id);
+      });
+
+      test('should replace [title] and [idDone]', () {
+        final todo = Todo(title: 'title 1');
+        final todo2 = todo.copyWith(title: 'title 2');
+        expect(todo2.title, 'title 2');
+        expect(todo2.isDone, isFalse);
+
+        final todo3 = todo2.copyWith(
+          title: 'title 3',
+          isDone: true,
+        );
+        expect(todo3.title, 'title 3');
+        expect(todo3.isDone, isTrue);
+
+        final todo4 = todo3.copyWith(isDone: false);
+        expect(todo4.title, 'title 3');
+        expect(todo4.isDone, isFalse);
+      });
+    });
   });
 }
