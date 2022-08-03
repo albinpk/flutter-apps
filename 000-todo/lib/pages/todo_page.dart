@@ -13,12 +13,7 @@ class TodoPage extends StatelessWidget {
         title: const Text('Todo'),
       ),
       body: const TodoView(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Add new Todo
-        },
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: const TodoPageFab(),
     );
   }
 }
