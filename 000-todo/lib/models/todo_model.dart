@@ -38,4 +38,15 @@ class Todo extends Equatable {
   factory Todo.fromJson(String source) {
     return Todo.fromMap(json.decode(source) as Map<String, dynamic>);
   }
+
+  Todo copyWith({
+    String? title,
+    bool? isDone,
+  }) {
+    return Todo(
+      id: id,
+      title: title ?? this.title,
+      isDone: isDone ?? this.isDone,
+    );
+  }
 }
