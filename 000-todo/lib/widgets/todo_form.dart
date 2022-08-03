@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../cubit/todo_cubit.dart';
+import '../models/models.dart';
 
 class TodoForm extends StatefulWidget {
   const TodoForm({super.key});
@@ -60,7 +64,7 @@ class _TodoFormState extends State<TodoForm> {
 
   void _onSave() {
     if (_formKey.currentState!.validate()) {
-      // Save new todo
+      context.read<TodoCubit>().addTodo(Todo(title: 'title'));
     }
   }
 }
