@@ -13,6 +13,7 @@ class TodoForm extends StatefulWidget {
 
 class _TodoFormState extends State<TodoForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late String _title;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +41,7 @@ class _TodoFormState extends State<TodoForm> {
                 }
                 return null;
               },
+              onSaved: (value) => _title = value!,
             ),
             const SizedBox(height: 20),
             Row(
@@ -64,7 +66,9 @@ class _TodoFormState extends State<TodoForm> {
 
   void _onSave() {
     if (_formKey.currentState!.validate()) {
-      context.read<TodoCubit>().addTodo(Todo(title: 'title'));
+      _formKey.currentState!.save();
+      context.read<TodoCubit>().addTodo(Todo(title: _title));
+      Navigator.of(context).pop();
     }
   }
 }
