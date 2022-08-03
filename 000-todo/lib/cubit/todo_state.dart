@@ -9,3 +9,7 @@ abstract class TodoState {
 class TodoInitial extends TodoState {
   const TodoInitial() : super(todos: const []);
 }
+
+class TodoChangeState extends TodoState {
+  const TodoChangeState({required super.todos});
+}
