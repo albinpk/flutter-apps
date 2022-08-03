@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'todo_form.dart';
+
 class TodoPageFab extends StatelessWidget {
   const TodoPageFab({super.key});
 
@@ -17,7 +19,7 @@ class TodoPageFab extends StatelessWidget {
       barrierDismissible: false,
       builder: (context) {
         return const Dialog(
-          child: Text('Todo form'),
+          child: TodoForm(),
         );
       },
     );
