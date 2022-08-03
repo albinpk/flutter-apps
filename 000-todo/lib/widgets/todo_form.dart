@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 
-class TodoForm extends StatelessWidget {
+class TodoForm extends StatefulWidget {
   const TodoForm({super.key});
+
+  @override
+  State<TodoForm> createState() => _TodoFormState();
+}
+
+class _TodoFormState extends State<TodoForm> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: _formKey,
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -22,6 +30,12 @@ class TodoForm extends StatelessWidget {
                 border: OutlineInputBorder(),
                 label: Text('Title'),
               ),
+              validator: (value) {
+                if (value?.trim().isEmpty ?? false) {
+                  return 'Please enter todo title';
+                }
+                return null;
+              },
             ),
             const SizedBox(height: 20),
             Row(
@@ -45,6 +59,8 @@ class TodoForm extends StatelessWidget {
   }
 
   void _onSave() {
-    // Save new todo
+    if (_formKey.currentState!.validate()) {
+      // Save new todo
+    }
   }
 }
