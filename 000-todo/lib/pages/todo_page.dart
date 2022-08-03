@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../models/models.dart';
+import '../widgets/widgets.dart';
+
 class TodoPage extends StatelessWidget {
   const TodoPage({super.key});
 
@@ -19,33 +22,12 @@ class TodoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        CheckboxListTile(
-          value: true,
-          title: Text(
-            'Todo 1',
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium
-                ?.copyWith(decoration: TextDecoration.lineThrough),
-          ),
-          controlAffinity: ListTileControlAffinity.leading,
-          onChanged: (_) {},
-        ),
-        CheckboxListTile(
-          value: false,
-          title: Text(
-            'Todo 2',
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium
-                ?.copyWith(fontWeight: FontWeight.w500),
-          ),
-          controlAffinity: ListTileControlAffinity.leading,
-          onChanged: (_) {},
-        ),
-      ],
+    return ListView.builder(
+      itemCount: 2,
+      itemBuilder: (context, i) {
+        if (i == 0) return TodoItem(todo: Todo(title: 'title'));
+        return TodoItem(todo: Todo(title: 'title', isDone: true));
+      },
     );
   }
 }
