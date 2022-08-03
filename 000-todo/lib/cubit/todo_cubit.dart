@@ -7,4 +7,10 @@ part 'todo_state.dart';
 
 class TodoCubit extends Cubit<TodoState> {
   TodoCubit() : super(const TodoInitial());
+
+  void addTodo(Todo todo) {
+    emit(
+      TodoChangeState(todos: [...state.todos, todo]),
+    );
+  }
 }
