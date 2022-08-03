@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../models/models.dart';
+import '../cubit/todo_cubit.dart';
 import '../widgets/widgets.dart';
 
 class TodoPage extends StatelessWidget {
@@ -23,11 +24,14 @@ class TodoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: 2,
-      itemBuilder: (context, i) {
-        if (i == 0) return TodoItem(todo: Todo(title: 'title'));
-        return TodoItem(todo: Todo(title: 'title', isDone: true));
+    return BlocBuilder<TodoCubit, TodoState>(
+      builder: (context, state) {
+        return ListView.builder(
+          itemCount: state.todos.length,
+          itemBuilder: (context, i) {
+            return TodoItem(todo: state.todos[i]);
+          },
+        );
       },
     );
   }
