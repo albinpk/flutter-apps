@@ -1,4 +1,3 @@
-import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -7,19 +6,18 @@ import 'package:todo/cubit/todo_cubit.dart';
 import 'package:todo/models/models.dart';
 import 'package:todo/widgets/widgets.dart';
 
-class _FakeTodo extends Fake implements Todo {}
-
-class _MockTodoCubit extends MockCubit<TodoState> implements TodoCubit {}
+import '../mocks/fake_todo.dart';
+import '../mocks/mock_todo_cubit.dart';
 
 void main() {
   setUpAll(() {
-    registerFallbackValue(_FakeTodo());
+    registerFallbackValue(FakeTodo());
   });
 
   late TodoCubit todoCubit;
 
   setUp(() {
-    todoCubit = _MockTodoCubit();
+    todoCubit = MockTodoCubit();
   });
 
   testWidgets(
