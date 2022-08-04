@@ -43,6 +43,18 @@ void main() {
     );
 
     blocTest<TodoCubit, TodoState>(
+      'should remove given todo when deleteTodo is called',
+      build: () => todoCubit,
+      act: (bloc) => bloc
+        ..addTodo(todo1)
+        ..deleteTodo(todo1),
+      expect: () => <TodoState>[
+        TodoChangeState(todos: [todo1]),
+        const TodoChangeState(todos: []),
+      ],
+    );
+
+    blocTest<TodoCubit, TodoState>(
       'emits [TodoChangeState] with updated todos when toggleIsDone is called.'
       'it should maintain order',
       build: () => todoCubit,
