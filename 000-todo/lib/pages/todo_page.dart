@@ -26,6 +26,12 @@ class TodoView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TodoCubit, TodoState>(
       builder: (context, state) {
+        if (state.todos.isEmpty) {
+          return const Center(
+            child: Text('Create a todo'),
+          );
+        }
+
         return ListView.builder(
           itemCount: state.todos.length,
           itemBuilder: (context, i) {
