@@ -25,6 +25,12 @@ class TodoItem extends StatelessWidget {
       onChanged: (_) {
         context.read<TodoCubit>().toggleIsDone(todo);
       },
+      secondary: IconButton(
+        icon: const Icon(Icons.delete),
+        onPressed: () {
+          context.read<TodoCubit>().deleteTodo(todo);
+        },
+      ),
     );
   }
 }
