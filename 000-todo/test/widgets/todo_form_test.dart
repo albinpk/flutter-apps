@@ -12,11 +12,14 @@ class _FakeTodo extends Fake implements Todo {}
 class _MockTodoCubit extends MockCubit<TodoState> implements TodoCubit {}
 
 void main() {
+  setUpAll(() {
+    registerFallbackValue(_FakeTodo());
+  });
+
   late TodoCubit todoCubit;
 
   setUp(() {
     todoCubit = _MockTodoCubit();
-    registerFallbackValue(_FakeTodo());
   });
 
   testWidgets(
@@ -46,7 +49,6 @@ void main() {
       expect(cancelButton, findsOneWidget);
       expect(saveButton, findsOneWidget);
 
-      when(() => todoCubit.addTodo(any())).thenReturn(null);
       await tester.tap(saveButton);
       await tester.pump();
 
