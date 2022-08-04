@@ -31,6 +31,7 @@ void main() {
       act: (bloc) => bloc
         ..addTodo(todo)
         ..toggleIsDone(todo),
+      skip: 1,
       expect: () => <TodoState>[
         TodoChangeState(todos: [todo.copyWith(isDone: true)]),
       ],
