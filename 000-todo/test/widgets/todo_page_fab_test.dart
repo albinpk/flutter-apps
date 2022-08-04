@@ -19,6 +19,12 @@ void main() {
 
       expect(find.byType(Dialog), findsOneWidget);
       expect(find.byType(TodoForm), findsOneWidget);
+
+      await tester.tap(find.widgetWithText(TextButton, 'Cancel'));
+      await tester.pump();
+
+      expect(find.byType(TodoForm), findsNothing);
+      expect(fab, findsOneWidget);
     },
   );
 }
