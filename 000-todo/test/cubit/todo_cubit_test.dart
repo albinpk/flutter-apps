@@ -29,6 +29,20 @@ void main() {
     );
 
     blocTest<TodoCubit, TodoState>(
+      'New todo should add to top of list',
+      build: () => todoCubit,
+      act: (bloc) => bloc
+        ..addTodo(todo1)
+        ..addTodo(todo2)
+        ..addTodo(Todo(id: '1', title: 'title')),
+      expect: () => <TodoState>[
+        TodoChangeState(todos: [todo1]),
+        TodoChangeState(todos: [todo2, todo1]),
+        TodoChangeState(todos: [Todo(id: '1', title: 'title'), todo2, todo1]),
+      ],
+    );
+
+    blocTest<TodoCubit, TodoState>(
       'emits [TodoChangeState] with updated todos when toggleIsDone is called.'
       'it should maintain order',
       build: () => todoCubit,
