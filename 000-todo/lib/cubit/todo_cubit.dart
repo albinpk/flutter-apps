@@ -15,6 +15,11 @@ class TodoCubit extends Cubit<TodoState> {
     );
   }
 
+  void deleteTodo(Todo todo) {
+    final newTodos = [...state.todos]..remove(todo);
+    emit(TodoChangeState(todos: newTodos));
+  }
+
   void toggleIsDone(Todo todo) {
     final newTodo = todo.copyWith(isDone: !todo.isDone);
     final todos = [...state.todos];
