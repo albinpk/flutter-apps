@@ -38,15 +38,24 @@ void main() {
       );
 
       final todoTile = find.widgetWithText(CheckboxListTile, 'title1');
+      final deleteButton = find.widgetWithIcon(IconButton, Icons.delete);
 
       expect(todoTile, findsOneWidget);
       expect(tester.widget<CheckboxListTile>(todoTile).value, isFalse);
+      expect(deleteButton, findsOneWidget);
 
       await tester.tap(todoTile);
-      await tester.pump();
 
       verify(
         () => todoCubit.toggleIsDone(
+          any(that: equals(todo)),
+        ),
+      ).called(1);
+
+      await tester.tap(deleteButton);
+
+      verify(
+        () => todoCubit.deleteTodo(
           any(that: equals(todo)),
         ),
       ).called(1);
