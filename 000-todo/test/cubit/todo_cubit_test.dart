@@ -55,6 +55,15 @@ void main() {
     );
 
     blocTest<TodoCubit, TodoState>(
+      'emits [TodoChangeState()] with updated todo when updateTodo() is called.',
+      build: () => todoCubit..addTodo(todo1),
+      act: (bloc) => bloc.updateTodo(todo1.copyWith(title: 'new title')),
+      expect: () => <TodoState>[
+        TodoChangeState(todos: [todo1.copyWith(title: 'new title')]),
+      ],
+    );
+
+    blocTest<TodoCubit, TodoState>(
       'emits [TodoChangeState] with updated todos when toggleIsDone is called.'
       'it should maintain order',
       build: () => todoCubit,
