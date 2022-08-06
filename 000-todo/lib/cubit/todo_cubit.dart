@@ -18,6 +18,13 @@ class TodoCubit extends Cubit<TodoState> {
     emit(TodoChangeState(todos: newTodos));
   }
 
+  void updateTodo(Todo updatedTodo) {
+    final todos = [...state.todos];
+    final index = todos.indexWhere((t) => t.id == updatedTodo.id);
+    todos[index] = updatedTodo;
+    emit(TodoChangeState(todos: todos));
+  }
+
   void toggleIsDone(Todo todo) {
     final newTodo = todo.copyWith(isDone: !todo.isDone);
     final todos = [...state.todos];
