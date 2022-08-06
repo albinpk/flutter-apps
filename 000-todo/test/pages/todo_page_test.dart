@@ -14,7 +14,7 @@ void main() {
   });
 
   testWidgets(
-    'TodoPage should have AppBar with title, '
+    'TodoPage should have TodoPageAppBar, '
     'TodoView and TodoPageFab. '
     'And should show info text if todos list is empty',
     (tester) async {
@@ -25,7 +25,7 @@ void main() {
         ),
       );
 
-      expect(find.widgetWithText(AppBar, 'Todo'), findsOneWidget);
+      expect(find.byType(TodoPageAppBar), findsOneWidget);
       expect(find.byType(TodoView), findsOneWidget);
       expect(find.text('Create a todo'), findsOneWidget);
       expect(find.byType(TodoPageFab), findsOneWidget);
