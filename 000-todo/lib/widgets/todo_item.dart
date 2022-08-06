@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../cubit/todo_cubit.dart';
 import '../models/models.dart';
+import 'todo_form.dart';
 
 class TodoItem extends StatelessWidget {
   const TodoItem({
@@ -29,7 +30,7 @@ class TodoItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => _onEditTap(context),
             icon: const Icon(Icons.edit),
           ),
           IconButton(
@@ -39,6 +40,16 @@ class TodoItem extends StatelessWidget {
             },
           ),
         ],
+      ),
+    );
+  }
+
+  void _onEditTap(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Dialog(
+        child: TodoForm(todo: todo),
       ),
     );
   }
