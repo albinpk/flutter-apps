@@ -16,14 +16,11 @@ class TodoPageAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: BlocBuilder<TodoCubit, TodoState>(
             buildWhen: (previous, current) {
               return previous.todos.length != current.todos.length ||
-                  previous.todos.where((t) => t.isDone).length !=
-                      current.todos.where((t) => t.isDone).length;
+                  previous.doneCount != current.doneCount;
             },
             builder: (context, state) {
-              final isDoneCount = state.todos.where((t) => t.isDone).length;
-              final status = '$isDoneCount/${state.todos.length}';
               return Text(
-                status,
+                '${state.doneCount}/${state.todos.length}',
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium
