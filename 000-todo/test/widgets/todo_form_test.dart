@@ -35,15 +35,15 @@ void main() {
         ),
       );
 
-      final todoTitleField = find.byType(TextFormField);
-      final todoTitleFieldErrorText = find.text('Please enter todo title');
-      final cancelButton = find.text('Cancel');
-      final saveButton = find.text('Save');
+      final titleFormField = find.byType(TextFormField);
+      final titleFormFieldErrorText = find.text('Please enter todo title');
+      final cancelButton = find.widgetWithText(TextButton, 'Cancel');
+      final saveButton = find.widgetWithText(ElevatedButton, 'Save');
 
       expect(find.byType(Form), findsOneWidget);
       expect(find.text('New Todo'), findsOneWidget);
-      expect(todoTitleField, findsOneWidget);
-      expect(todoTitleFieldErrorText, findsNothing);
+      expect(titleFormField, findsOneWidget);
+      expect(titleFormFieldErrorText, findsNothing);
       expect(cancelButton, findsOneWidget);
       expect(saveButton, findsOneWidget);
 
@@ -51,16 +51,16 @@ void main() {
       await tester.pump();
 
       verifyNever(() => todoCubit.addTodo(any()));
-      expect(todoTitleFieldErrorText, findsOneWidget);
+      expect(titleFormFieldErrorText, findsOneWidget);
 
-      await tester.enterText(todoTitleField, '    ');
+      await tester.enterText(titleFormField, '    ');
       await tester.tap(saveButton);
       await tester.pump();
 
       verifyNever(() => todoCubit.addTodo(any()));
-      expect(todoTitleFieldErrorText, findsOneWidget);
+      expect(titleFormFieldErrorText, findsOneWidget);
 
-      await tester.enterText(todoTitleField, 'title1');
+      await tester.enterText(titleFormField, 'title1');
       await tester.tap(saveButton);
       await tester.pump();
 
@@ -75,7 +75,7 @@ void main() {
           ),
         ),
       ).called(1);
-      expect(todoTitleFieldErrorText, findsNothing);
+      expect(titleFormFieldErrorText, findsNothing);
     },
   );
 }
