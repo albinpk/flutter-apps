@@ -76,7 +76,40 @@ void main() {
           ),
         ),
       ).called(1);
+      verifyNever(() => todoCubit.updateTodo(any()));
       expect(titleFormFieldErrorText, findsNothing);
+    },
+  );
+
+  testWidgets(
+    'TodoForm having [todo] argument should call updateTodo() on save',
+    (tester) async {
+      final todo = Todo(title: 'title1');
+
+      await tester.pumpWidget(
+        BlocProvider<TodoCubit>(
+          create: (context) => todoCubit,
+          child: MaterialApp(
+            home: Scaffold(body: TodoForm(todo: todo)),
+          ),
+        ),
+      );
+
+      final titleFormField = find.byType(TextFormField);
+      final titleFormFieldErrorText = find.text('Please enter todo title');
+      final saveButton = find.widgetWithText(ElevatedButton, 'Save');
+
+      expect(find.text('Edit Todo'), findsOneWidget);
+      expect(
+        tester.widget<TextFormField>(titleFormField).initialValue,
+        todo.title,
+      );
+      expect(titleFormFieldErrorText, findsNothing);
+
+      await tester.tap(saveButton);
+
+      verify(() => todoCubit.updateTodo(todo)).called(1);
+      verifyNever(() => todoCubit.addTodo(any()));
     },
   );
 }
