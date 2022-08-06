@@ -9,12 +9,10 @@ class TodoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Todo'),
-      ),
-      body: const TodoView(),
-      floatingActionButton: const TodoPageFab(),
+    return const Scaffold(
+      appBar: TodoPageAppBar(),
+      body: TodoView(),
+      floatingActionButton: TodoPageFab(),
     );
   }
 }
