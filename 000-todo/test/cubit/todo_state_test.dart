@@ -13,5 +13,33 @@ void main() {
       final todoChangeState = TodoChangeState(todos: [Todo(title: 'title')]);
       expect(todoChangeState.todos.length, 1);
     });
+
+    test('[doneCount] should return length of completed todos', () {
+      const todoInitial = TodoInitial();
+      final todoChangeState = TodoChangeState(
+        todos: [Todo(title: 'title')],
+      );
+      final todoChangeState2 = TodoChangeState(
+        todos: [Todo(title: 'title', isDone: true)],
+      );
+      final todoChangeState3 = TodoChangeState(
+        todos: [
+          Todo(title: 'title', isDone: true),
+          Todo(title: 'title'),
+        ],
+      );
+      final todoChangeState4 = TodoChangeState(
+        todos: [
+          Todo(title: 'title', isDone: true),
+          Todo(title: 'title', isDone: true),
+        ],
+      );
+
+      expect(todoInitial.doneCount, 0);
+      expect(todoChangeState.doneCount, 0);
+      expect(todoChangeState2.doneCount, 1);
+      expect(todoChangeState3.doneCount, 1);
+      expect(todoChangeState4.doneCount, 2);
+    });
   });
 }
