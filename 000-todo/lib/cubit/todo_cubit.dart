@@ -10,9 +10,7 @@ class TodoCubit extends Cubit<TodoState> {
   TodoCubit() : super(const TodoInitial());
 
   void addTodo(Todo todo) {
-    emit(
-      TodoChangeState(todos: [todo, ...state.todos]),
-    );
+    emit(TodoChangeState(todos: [todo, ...state.todos]));
   }
 
   void deleteTodo(Todo todo) {
