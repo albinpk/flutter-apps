@@ -43,6 +43,7 @@ void main() {
       expect(find.byType(Form), findsOneWidget);
       expect(find.text('New Todo'), findsOneWidget);
       expect(titleFormField, findsOneWidget);
+      expect(tester.widget<TextFormField>(titleFormField).initialValue, '');
       expect(titleFormFieldErrorText, findsNothing);
       expect(cancelButton, findsOneWidget);
       expect(saveButton, findsOneWidget);
