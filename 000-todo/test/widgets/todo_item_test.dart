@@ -48,19 +48,11 @@ void main() {
 
       await tester.tap(todoTile);
 
-      verify(
-        () => todoCubit.toggleIsDone(
-          any(that: equals(todo)),
-        ),
-      ).called(1);
+      verify(() => todoCubit.toggleIsDone(todo)).called(1);
 
       await tester.tap(deleteButton);
 
-      verify(
-        () => todoCubit.deleteTodo(
-          any(that: equals(todo)),
-        ),
-      ).called(1);
+      verify(() => todoCubit.deleteTodo(todo)).called(1);
 
       await tester.tap(editButton);
       await tester.pump();
