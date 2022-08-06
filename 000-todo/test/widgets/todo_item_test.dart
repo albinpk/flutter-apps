@@ -39,10 +39,12 @@ void main() {
 
       final todoTile = find.widgetWithText(CheckboxListTile, 'title1');
       final deleteButton = find.widgetWithIcon(IconButton, Icons.delete);
+      final editButton = find.widgetWithIcon(IconButton, Icons.edit);
 
       expect(todoTile, findsOneWidget);
       expect(tester.widget<CheckboxListTile>(todoTile).value, isFalse);
       expect(deleteButton, findsOneWidget);
+      expect(editButton, findsOneWidget);
 
       await tester.tap(todoTile);
 
@@ -59,6 +61,12 @@ void main() {
           any(that: equals(todo)),
         ),
       ).called(1);
+
+      await tester.tap(editButton);
+      await tester.pump();
+
+      expect(find.byType(Dialog), findsOneWidget);
+      expect(find.byType(TodoForm), findsOneWidget);
     },
   );
 }
