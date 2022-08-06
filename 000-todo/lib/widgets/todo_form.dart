@@ -5,7 +5,12 @@ import '../cubit/todo_cubit.dart';
 import '../models/models.dart';
 
 class TodoForm extends StatefulWidget {
-  const TodoForm({super.key});
+  final Todo? todo;
+
+  const TodoForm({
+    super.key,
+    this.todo,
+  });
 
   @override
   State<TodoForm> createState() => _TodoFormState();
@@ -25,11 +30,12 @@ class _TodoFormState extends State<TodoForm> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'New Todo',
+              widget.todo == null ? 'New Todo' : 'Edit Todo',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 20),
             TextFormField(
+              initialValue: widget.todo?.title,
               autofocus: true,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
@@ -67,7 +73,15 @@ class _TodoFormState extends State<TodoForm> {
   void _onSave() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      context.read<TodoCubit>().addTodo(Todo(title: _title));
+
+      if (widget.todo == null) {
+        context.read<TodoCubit>().addTodo(Todo(title: _title));
+      } else {
+        context
+            .read<TodoCubit>()
+            .updateTodo(widget.todo!.copyWith(title: _title));
+      }
+
       Navigator.of(context).pop();
     }
   }
