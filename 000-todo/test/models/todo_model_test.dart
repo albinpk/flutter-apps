@@ -36,6 +36,19 @@ void main() {
       expect(todo.title, 'todo1');
     });
 
+    test('default value of [description] is ""', () {
+      final todo = Todo(title: 'title');
+      expect(todo.description, '');
+    });
+
+    test('should have given description', () {
+      final todo = Todo(
+        title: 'title',
+        description: 'description',
+      );
+      expect(todo.description, 'description');
+    });
+
     test('default value of [isDone] is false', () {
       final todo = Todo(title: 'title');
       expect(todo.isDone, isFalse);
@@ -51,10 +64,16 @@ void main() {
 
     group('json', () {
       test('toJson', () {
-        final todo = Todo(id: '123', title: 'todo1', isDone: true);
+        final todo = Todo(
+          id: '123',
+          title: 'todo1',
+          description: 'description',
+          isDone: true,
+        );
         final todoJson = jsonEncode({
           'id': '123',
           'title': 'todo1',
+          'description': 'description',
           'isDone': true,
         });
         expect(todo.toJson(), equals(todoJson));
@@ -64,9 +83,15 @@ void main() {
         final todoJson = jsonEncode({
           'id': '123',
           'title': 'todo1',
+          'description': 'description',
           'isDone': true,
         });
-        final todo = Todo(id: '123', title: 'todo1', isDone: true);
+        final todo = Todo(
+          id: '123',
+          title: 'todo1',
+          description: 'description',
+          isDone: true,
+        );
         expect(Todo.fromJson(todoJson), equals(todo));
       });
     });
@@ -81,21 +106,29 @@ void main() {
         expect(newTodo.id, todo.id);
       });
 
-      test('should replace [title] and [idDone]', () {
+      test('should replace [title], [description] and [idDone]', () {
         final todo = Todo(title: 'title 1');
+
         final todo2 = todo.copyWith(title: 'title 2');
         expect(todo2.title, 'title 2');
+        expect(todo2.description, '');
         expect(todo2.isDone, isFalse);
 
         final todo3 = todo2.copyWith(
           title: 'title 3',
+          description: 'description',
           isDone: true,
         );
         expect(todo3.title, 'title 3');
+        expect(todo3.description, 'description');
         expect(todo3.isDone, isTrue);
 
-        final todo4 = todo3.copyWith(isDone: false);
+        final todo4 = todo3.copyWith(
+          isDone: false,
+          description: 'description2',
+        );
         expect(todo4.title, 'title 3');
+        expect(todo4.description, 'description2');
         expect(todo4.isDone, isFalse);
       });
     });
