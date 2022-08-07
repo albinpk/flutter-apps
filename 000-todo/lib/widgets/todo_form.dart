@@ -92,11 +92,19 @@ class _TodoFormState extends State<TodoForm> {
       _formKey.currentState!.save();
 
       if (widget.todo == null) {
-        context.read<TodoCubit>().addTodo(Todo(title: _title));
+        context.read<TodoCubit>().addTodo(
+              Todo(
+                title: _title,
+                description: _description,
+              ),
+            );
       } else {
-        context
-            .read<TodoCubit>()
-            .updateTodo(widget.todo!.copyWith(title: _title));
+        context.read<TodoCubit>().updateTodo(
+              widget.todo!.copyWith(
+                title: _title,
+                description: _description,
+              ),
+            );
       }
 
       Navigator.of(context).pop();
