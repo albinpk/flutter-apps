@@ -65,4 +65,33 @@ void main() {
       expect(find.byType(TodoForm), findsOneWidget);
     },
   );
+
+  testWidgets(
+    'TodoItem with [description] should render description',
+    (tester) async {
+      final todo = Todo(
+        title: 'title1',
+        description: 'description',
+        isDone: true,
+      );
+
+      await tester.pumpWidget(
+        BlocProvider<TodoCubit>(
+          create: (context) => todoCubit,
+          child: MaterialApp(
+            home: Scaffold(
+              body: TodoItem(todo: todo),
+            ),
+          ),
+        ),
+      );
+
+      final checkboxListTile = tester.widget<CheckboxListTile>(
+        find.widgetWithText(CheckboxListTile, 'title1'),
+      );
+      expect(checkboxListTile.value, isTrue);
+      expect(checkboxListTile.subtitle, isNotNull);
+      expect(find.text('description'), findsOneWidget);
+    },
+  );
 }
