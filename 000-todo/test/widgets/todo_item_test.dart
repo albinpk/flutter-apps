@@ -22,7 +22,8 @@ void main() {
 
   testWidgets(
     'TodoItem should have a CheckboxListTile with value false '
-    'and should call TodoCubit.toggleIsDone() with given [todo] on tap',
+    'and should call TodoCubit.toggleIsDone() with given [todo] on tap '
+    'and should have edit and delete buttons',
     (tester) async {
       final todo = Todo(title: 'title1');
 
