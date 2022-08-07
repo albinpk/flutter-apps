@@ -8,6 +8,7 @@ class TodoPageFab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      tooltip: 'Add Todo',
       onPressed: () => _onTap(context),
       child: const Icon(Icons.add),
     );
