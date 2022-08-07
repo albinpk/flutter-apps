@@ -19,6 +19,7 @@ class TodoForm extends StatefulWidget {
 class _TodoFormState extends State<TodoForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late String _title;
+  late String _description;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +49,16 @@ class _TodoFormState extends State<TodoForm> {
                 return null;
               },
               onSaved: (value) => _title = value!.trim(),
+            ),
+            const SizedBox(height: 20),
+            TextFormField(
+              initialValue: widget.todo?.description,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                label: Text('Description'),
+              ),
+              maxLines: 3,
+              onSaved: (value) => _description = value?.trim() ?? '',
             ),
             const SizedBox(height: 20),
             Row(
