@@ -44,6 +44,7 @@ void main() {
       expect(todoTile, findsOneWidget);
       expect(tester.widget<CheckboxListTile>(todoTile).value, isFalse);
       expect(deleteButton, findsOneWidget);
+      expect(tester.widget<IconButton>(deleteButton).tooltip, 'Delete');
       expect(editButton, findsOneWidget);
       expect(tester.widget<IconButton>(editButton).tooltip, 'Edit');
 
