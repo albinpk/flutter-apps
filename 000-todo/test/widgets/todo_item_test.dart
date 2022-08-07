@@ -45,6 +45,7 @@ void main() {
       expect(tester.widget<CheckboxListTile>(todoTile).value, isFalse);
       expect(deleteButton, findsOneWidget);
       expect(editButton, findsOneWidget);
+      expect(tester.widget<IconButton>(editButton).tooltip, 'Edit');
 
       await tester.tap(todoTile);
 
