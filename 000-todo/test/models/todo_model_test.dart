@@ -20,7 +20,7 @@ void main() {
       expect(todo.title, 'todo1');
     });
 
-    test('default value of [isDone] in false', () {
+    test('default value of [isDone] is false', () {
       final todo = Todo(title: 'title');
       expect(todo.isDone, isFalse);
     });
