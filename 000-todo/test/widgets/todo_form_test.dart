@@ -61,7 +61,8 @@ void main() {
       verifyNever(() => todoCubit.addTodo(any()));
       expect(titleFormFieldErrorText, findsOneWidget);
 
-      await tester.enterText(titleFormField, 'title1');
+      // TodoForm should trim the title on save
+      await tester.enterText(titleFormField, '    title1     ');
       await tester.tap(saveButton);
       await tester.pump();
 
