@@ -15,6 +15,22 @@ void main() {
       expect(todo.id, equals('123'));
     });
 
+    test(
+      'should throw [AssertionError] with message when [title] is empty',
+      () {
+        expect(() => Todo(title: ''), throwsAssertionError);
+        expect(
+          () => Todo(title: '   '),
+          throwsA(
+            predicate<AssertionError>(
+              (e) => e.message == 'Todo [title] must not be empty',
+              'AssertionError with a message',
+            ),
+          ),
+        );
+      },
+    );
+
     test('should have given title', () {
       final todo = Todo(title: 'todo1');
       expect(todo.title, 'todo1');
