@@ -22,6 +22,7 @@ class TodoItem extends StatelessWidget {
     return CheckboxListTile(
       value: todo.isDone,
       title: Text(todo.title, style: style),
+      subtitle: todo.description.isNotEmpty ? Text(todo.description) : null,
       controlAffinity: ListTileControlAffinity.leading,
       onChanged: (_) {
         context.read<TodoCubit>().toggleIsDone(todo);
