@@ -5,7 +5,7 @@ import 'package:todo/widgets/widgets.dart';
 void main() {
   testWidgets(
     'TodoPageFab should have a FloatingActionButton '
-    'and should open TodoForm on tap',
+    'with tooltip and should open TodoForm on tap',
     (tester) async {
       await tester.pumpWidget(
         const MaterialApp(home: TodoPageFab()),
@@ -13,6 +13,7 @@ void main() {
 
       final fab = find.widgetWithIcon(FloatingActionButton, Icons.add);
       expect(fab, findsOneWidget);
+      expect(tester.widget<FloatingActionButton>(fab).tooltip, 'Add Todo');
 
       await tester.tap(fab);
       await tester.pump();
