@@ -12,7 +12,8 @@ class Todo extends Equatable {
     String? id,
     required this.title,
     this.isDone = false,
-  }) : id = id ?? const Uuid().v4();
+  })  : assert(title.trim().isNotEmpty, 'Todo [title] must not be empty'),
+        id = id ?? const Uuid().v4();
 
   @override
   List<Object> get props => [id, title, isDone];
