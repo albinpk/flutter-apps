@@ -30,6 +30,7 @@ class TodoItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
+            tooltip: 'Edit',
             onPressed: () => _onEditTap(context),
             icon: const Icon(Icons.edit),
           ),
