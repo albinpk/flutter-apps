@@ -26,58 +26,61 @@ class _TodoFormState extends State<TodoForm> {
     return Form(
       key: _formKey,
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                widget.todo == null ? 'New Todo' : 'Edit Todo',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                initialValue: widget.todo?.title,
-                autofocus: true,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  label: Text('Title'),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  widget.todo == null ? 'New Todo' : 'Edit Todo',
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
-                validator: (value) {
-                  if (value?.trim().isEmpty ?? true) {
-                    return 'Please enter todo title';
-                  }
-                  return null;
-                },
-                onSaved: (value) => _title = value!.trim(),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                initialValue: widget.todo?.description,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  label: Text('Description'),
+                const SizedBox(height: 20),
+                TextFormField(
+                  initialValue: widget.todo?.title,
+                  autofocus: true,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    label: Text('Title'),
+                  ),
+                  validator: (value) {
+                    if (value?.trim().isEmpty ?? true) {
+                      return 'Please enter todo title';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _title = value!.trim(),
                 ),
-                maxLines: 3,
-                onSaved: (value) => _description = value?.trim() ?? '',
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel'),
+                const SizedBox(height: 20),
+                TextFormField(
+                  initialValue: widget.todo?.description,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    label: Text('Description'),
                   ),
-                  const SizedBox(width: 10),
-                  ElevatedButton(
-                    onPressed: _onSave,
-                    child: const Text('Save'),
-                  ),
-                ],
-              )
-            ],
+                  maxLines: 3,
+                  onSaved: (value) => _description = value?.trim() ?? '',
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('Cancel'),
+                    ),
+                    const SizedBox(width: 10),
+                    ElevatedButton(
+                      onPressed: _onSave,
+                      child: const Text('Save'),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
