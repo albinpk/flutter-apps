@@ -35,6 +35,7 @@ class TodoItem extends StatelessWidget {
             icon: const Icon(Icons.edit),
           ),
           IconButton(
+            tooltip: 'Delete',
             icon: const Icon(Icons.delete),
             onPressed: () {
               context.read<TodoCubit>().deleteTodo(todo);
