@@ -47,7 +47,7 @@ class _TodoFormState extends State<TodoForm> {
                 }
                 return null;
               },
-              onSaved: (value) => _title = value!,
+              onSaved: (value) => _title = value!.trim(),
             ),
             const SizedBox(height: 20),
             Row(
