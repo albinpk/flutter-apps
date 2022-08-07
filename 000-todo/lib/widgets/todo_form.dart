@@ -42,7 +42,7 @@ class _TodoFormState extends State<TodoForm> {
                 label: Text('Title'),
               ),
               validator: (value) {
-                if (value?.trim().isEmpty ?? false) {
+                if (value?.trim().isEmpty ?? true) {
                   return 'Please enter todo title';
                 }
                 return null;
