@@ -20,52 +20,48 @@ void main() {
     });
 
     blocTest<TodoCubit, TodoState>(
-      'emits [TodoChangeState] with given todo when addTodo is called.',
-      build: () => todoCubit,
-      act: (bloc) => bloc.addTodo(todo1),
-      expect: () => <TodoState>[
-        TodoChangeState(todos: [todo1]),
-      ],
-    );
-
-    blocTest<TodoCubit, TodoState>(
-      'New todo should add to top of list',
+      'emits [TodoAdded] with addedTodo when addTodo() is called. '
+      'and new todo should add to the top of list',
       build: () => todoCubit,
       act: (bloc) => bloc
         ..addTodo(todo1)
-        ..addTodo(todo2)
-        ..addTodo(Todo(id: '1', title: 'title')),
+        ..addTodo(todo2),
       expect: () => <TodoState>[
-        TodoChangeState(todos: [todo1]),
-        TodoChangeState(todos: [todo2, todo1]),
-        TodoChangeState(todos: [Todo(id: '1', title: 'title'), todo2, todo1]),
+        TodoAdded(addedTodo: todo1, todos: [todo1]),
+        TodoAdded(addedTodo: todo2, todos: [todo2, todo1]),
       ],
     );
 
     blocTest<TodoCubit, TodoState>(
-      'should remove given todo when deleteTodo is called',
+      'emits [TodoDeleted] with deletedTodo when deleteTodo() is called.',
       build: () => todoCubit,
       act: (bloc) => bloc
         ..addTodo(todo1)
         ..deleteTodo(todo1),
+      skip: 1,
       expect: () => <TodoState>[
-        TodoChangeState(todos: [todo1]),
-        const TodoChangeState(todos: []),
+        TodoDeleted(deletedTodo: todo1, todos: const []),
       ],
     );
 
     blocTest<TodoCubit, TodoState>(
-      'emits [TodoChangeState()] with updated todo when updateTodo() is called.',
-      build: () => todoCubit..addTodo(todo1),
-      act: (bloc) => bloc.updateTodo(todo1.copyWith(title: 'new title')),
+      'emits [TodoUpdated] with updatedTodo when updateTodo() is called.',
+      build: () => todoCubit,
+      act: (bloc) => bloc
+        ..addTodo(todo1)
+        ..updateTodo(todo1.copyWith(title: 'new title')),
+      skip: 1,
       expect: () => <TodoState>[
-        TodoChangeState(todos: [todo1.copyWith(title: 'new title')]),
+        TodoUpdated(
+          updatedTodo: todo1.copyWith(title: 'new title'),
+          todos: [todo1.copyWith(title: 'new title')],
+        )
       ],
     );
 
     blocTest<TodoCubit, TodoState>(
-      'emits [TodoChangeState] with updated todos when toggleIsDone is called.'
-      'it should maintain order',
+      'emits [TodoUpdated] with updatedTodo when toggleIsDone() is called. '
+      'and it should maintain todos order',
       build: () => todoCubit,
       act: (bloc) => bloc
         ..addTodo(todo1)
@@ -74,8 +70,14 @@ void main() {
         ..toggleIsDone(todo2),
       skip: 2,
       expect: () => <TodoState>[
-        TodoChangeState(todos: [todo2, todo1Toggled]),
-        TodoChangeState(todos: [todo2Toggled, todo1Toggled]),
+        TodoUpdated(
+          updatedTodo: todo1Toggled,
+          todos: [todo2, todo1Toggled],
+        ),
+        TodoUpdated(
+          updatedTodo: todo2Toggled,
+          todos: [todo2Toggled, todo1Toggled],
+        ),
       ],
     );
   });
