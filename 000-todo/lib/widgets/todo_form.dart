@@ -46,6 +46,7 @@ class _TodoFormState extends State<TodoForm> {
                     border: OutlineInputBorder(),
                     label: Text('Title'),
                   ),
+                  textCapitalization: TextCapitalization.sentences,
                   validator: (value) {
                     if (value?.trim().isEmpty ?? true) {
                       return 'Please enter todo title';
@@ -61,6 +62,7 @@ class _TodoFormState extends State<TodoForm> {
                     border: OutlineInputBorder(),
                     label: Text('Description'),
                   ),
+                  textCapitalization: TextCapitalization.sentences,
                   maxLines: 3,
                   onSaved: (value) => _description = value?.trim() ?? '',
                 ),
