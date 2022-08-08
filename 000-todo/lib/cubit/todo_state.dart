@@ -14,14 +14,7 @@ abstract class TodoState extends Equatable {
 
 class TodoInitial extends TodoState {
   const TodoInitial() : super(todos: const []);
-}
 
-@Deprecated(
-  'Use other meaningful [TodoState]s '
-  'like [TodoAdded], [TodoUpdated], [TodoDeleted]',
-)
-class TodoChangeState extends TodoState {
-  const TodoChangeState({required super.todos});
 }
 
 class TodoAdded extends TodoState {
