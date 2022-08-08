@@ -47,6 +47,7 @@ class _TodoFormState extends State<TodoForm> {
                     label: Text('Title'),
                   ),
                   textCapitalization: TextCapitalization.sentences,
+                  textInputAction: TextInputAction.next,
                   validator: (value) {
                     if (value?.trim().isEmpty ?? true) {
                       return 'Please enter todo title';
