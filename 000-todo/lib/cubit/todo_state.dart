@@ -16,6 +16,46 @@ class TodoInitial extends TodoState {
   const TodoInitial() : super(todos: const []);
 }
 
+@Deprecated(
+  'Use other meaningful [TodoState]s '
+  'like [TodoAdded], [TodoUpdated], [TodoDeleted]',
+)
 class TodoChangeState extends TodoState {
   const TodoChangeState({required super.todos});
+}
+
+class TodoAdded extends TodoState {
+  const TodoAdded({
+    required this.addedTodo,
+    required super.todos,
+  });
+
+  final Todo addedTodo;
+
+  @override
+  List<Object> get props => [addedTodo];
+}
+
+class TodoUpdated extends TodoState {
+  const TodoUpdated({
+    required this.updatedTodo,
+    required super.todos,
+  });
+
+  final Todo updatedTodo;
+
+  @override
+  List<Object> get props => [updatedTodo];
+}
+
+class TodoDeleted extends TodoState {
+  const TodoDeleted({
+    required this.deletedTodo,
+    required super.todos,
+  });
+
+  final Todo deletedTodo;
+
+  @override
+  List<Object> get props => [deletedTodo];
 }
