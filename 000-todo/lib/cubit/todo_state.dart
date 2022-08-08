@@ -7,14 +7,13 @@ abstract class TodoState extends Equatable {
   const TodoState({required this.todos});
 
   int get doneCount => todos.where((t) => t.isDone).length;
-
-  @override
-  List<Object?> get props => [todos];
 }
 
 class TodoInitial extends TodoState {
   const TodoInitial() : super(todos: const []);
 
+  @override
+  List<Object?> get props => [];
 }
 
 class TodoAdded extends TodoState {
