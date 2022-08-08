@@ -8,6 +8,12 @@ void main() {
       expect(todoInitial.todos, isEmpty);
     });
 
+    test('equality', () {
+      // ignoring for 100% test coverage
+      // ignore: prefer_const_constructors
+      final init = TodoInitial();
+      const init2 = TodoInitial();
+      expect(init, init2);
     });
   });
 }
