@@ -19,7 +19,9 @@ class TodoCubit extends Cubit<TodoState> {
   }
 
   void deleteTodo(Todo todo) {
-    final todos = [...state.todos]..remove(todo);
+    final todos = [...state.todos];
+    final isRemoved = todos.remove(todo);
+    assert(isRemoved);
     emit(
       TodoDeleted(
         deletedTodo: todo,
@@ -31,6 +33,7 @@ class TodoCubit extends Cubit<TodoState> {
   void updateTodo(Todo updatedTodo) {
     final todos = [...state.todos];
     final index = todos.indexWhere((t) => t.id == updatedTodo.id);
+    assert(index != -1);
     todos[index] = updatedTodo;
     emit(
       TodoUpdated(
