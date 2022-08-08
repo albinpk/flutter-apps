@@ -33,7 +33,7 @@ class TodoAdded extends TodoState {
   final Todo addedTodo;
 
   @override
-  List<Object> get props => [addedTodo];
+  List<Object> get props => [addedTodo, todos];
 }
 
 class TodoUpdated extends TodoState {
@@ -45,7 +45,7 @@ class TodoUpdated extends TodoState {
   final Todo updatedTodo;
 
   @override
-  List<Object> get props => [updatedTodo];
+  List<Object> get props => [updatedTodo, todos];
 }
 
 class TodoDeleted extends TodoState {
@@ -57,5 +57,5 @@ class TodoDeleted extends TodoState {
   final Todo deletedTodo;
 
   @override
-  List<Object> get props => [deletedTodo];
+  List<Object> get props => [deletedTodo, todos];
 }
