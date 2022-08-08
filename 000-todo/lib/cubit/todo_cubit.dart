@@ -10,19 +10,34 @@ class TodoCubit extends Cubit<TodoState> {
   TodoCubit() : super(const TodoInitial());
 
   void addTodo(Todo todo) {
-    emit(TodoChangeState(todos: [todo, ...state.todos]));
+    emit(
+      TodoAdded(
+        addedTodo: todo,
+        todos: [todo, ...state.todos],
+      ),
+    );
   }
 
   void deleteTodo(Todo todo) {
-    final newTodos = [...state.todos]..remove(todo);
-    emit(TodoChangeState(todos: newTodos));
+    final todos = [...state.todos]..remove(todo);
+    emit(
+      TodoDeleted(
+        deletedTodo: todo,
+        todos: todos,
+      ),
+    );
   }
 
   void updateTodo(Todo updatedTodo) {
     final todos = [...state.todos];
     final index = todos.indexWhere((t) => t.id == updatedTodo.id);
     todos[index] = updatedTodo;
-    emit(TodoChangeState(todos: todos));
+    emit(
+      TodoUpdated(
+        updatedTodo: updatedTodo,
+        todos: todos,
+      ),
+    );
   }
 
   void toggleIsDone(Todo todo) {
