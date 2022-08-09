@@ -28,7 +28,7 @@ void main() {
       );
 
       expect(find.widgetWithText(AppBar, 'Todo'), findsOneWidget);
-      expect(find.text('0/0'), findsOneWidget);
+      expect(find.text('0/0'), findsNothing);
 
       todoCubit.addTodo(todo);
       await tester.pump();
@@ -48,7 +48,7 @@ void main() {
       todoCubit.deleteTodo(todo);
       await tester.pumpAndSettle();
 
-      expect(find.text('0/0'), findsOneWidget);
+      expect(find.text('0/0'), findsNothing);
     },
   );
 }
