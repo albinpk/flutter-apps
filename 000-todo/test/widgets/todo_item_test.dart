@@ -23,7 +23,7 @@ void main() {
   testWidgets(
     'TodoItem should have a CheckboxListTile with value false '
     'and should call TodoCubit.toggleIsDone() with given [todo] on tap '
-    'and should have edit and delete buttons',
+    'and should have edit button',
     (tester) async {
       final todo = Todo(title: 'title1');
 
@@ -39,24 +39,17 @@ void main() {
       );
 
       final todoTile = find.widgetWithText(CheckboxListTile, 'title1');
-      final deleteButton = find.widgetWithIcon(IconButton, Icons.delete);
       final editButton = find.widgetWithIcon(IconButton, Icons.edit);
 
       expect(todoTile, findsOneWidget);
       expect(tester.widget<CheckboxListTile>(todoTile).value, isFalse);
       expect(tester.widget<CheckboxListTile>(todoTile).subtitle, isNull);
-      expect(deleteButton, findsOneWidget);
-      expect(tester.widget<IconButton>(deleteButton).tooltip, 'Delete');
       expect(editButton, findsOneWidget);
       expect(tester.widget<IconButton>(editButton).tooltip, 'Edit');
 
       await tester.tap(todoTile);
 
       verify(() => todoCubit.toggleIsDone(todo)).called(1);
-
-      await tester.tap(deleteButton);
-
-      verify(() => todoCubit.deleteTodo(todo)).called(1);
 
       await tester.tap(editButton);
       await tester.pump();
