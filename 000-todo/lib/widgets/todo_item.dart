@@ -19,30 +19,44 @@ class TodoItem extends StatelessWidget {
           decoration: todo.isDone ? TextDecoration.lineThrough : null,
           fontWeight: todo.isDone ? null : FontWeight.w500,
         );
-    return CheckboxListTile(
-      value: todo.isDone,
-      title: Text(todo.title, style: style),
-      subtitle: todo.description.isNotEmpty ? Text(todo.description) : null,
-      controlAffinity: ListTileControlAffinity.leading,
-      onChanged: (_) {
-        context.read<TodoCubit>().toggleIsDone(todo);
-      },
-      secondary: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            tooltip: 'Edit',
-            onPressed: () => _onEditTap(context),
-            icon: const Icon(Icons.edit),
+    return Dismissible(
+      key: ValueKey(todo),
+      direction: DismissDirection.endToStart,
+      background: const ColoredBox(
+        color: Colors.red,
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: EdgeInsets.only(right: 25),
+            child: Icon(Icons.delete, color: Colors.white),
           ),
-          IconButton(
-            tooltip: 'Delete',
-            icon: const Icon(Icons.delete),
-            onPressed: () {
-              context.read<TodoCubit>().deleteTodo(todo);
-            },
-          ),
-        ],
+        ),
+      ),
+      child: CheckboxListTile(
+        value: todo.isDone,
+        title: Text(todo.title, style: style),
+        subtitle: todo.description.isNotEmpty ? Text(todo.description) : null,
+        controlAffinity: ListTileControlAffinity.leading,
+        onChanged: (_) {
+          context.read<TodoCubit>().toggleIsDone(todo);
+        },
+        secondary: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              tooltip: 'Edit',
+              onPressed: () => _onEditTap(context),
+              icon: const Icon(Icons.edit),
+            ),
+            IconButton(
+              tooltip: 'Delete',
+              icon: const Icon(Icons.delete),
+              onPressed: () {
+                context.read<TodoCubit>().deleteTodo(todo);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
