@@ -43,22 +43,10 @@ class TodoItem extends StatelessWidget {
         onChanged: (_) {
           context.read<TodoCubit>().toggleIsDone(todo);
         },
-        secondary: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              tooltip: 'Edit',
-              onPressed: () => _onEditTap(context),
-              icon: const Icon(Icons.edit),
-            ),
-            IconButton(
-              tooltip: 'Delete',
-              icon: const Icon(Icons.delete),
-              onPressed: () {
-                context.read<TodoCubit>().deleteTodo(todo);
-              },
-            ),
-          ],
+        secondary: IconButton(
+          tooltip: 'Edit',
+          onPressed: () => _onEditTap(context),
+          icon: const Icon(Icons.edit),
         ),
       ),
     );
