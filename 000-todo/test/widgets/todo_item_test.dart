@@ -94,4 +94,29 @@ void main() {
       expect(find.text('description'), findsOneWidget);
     },
   );
+
+  testWidgets(
+    'should call deleteTodo() with given todo when dismiss to left',
+    (tester) async {
+      final todo = Todo(title: 'title1');
+
+      await tester.pumpWidget(
+        BlocProvider<TodoCubit>(
+          create: (context) => todoCubit,
+          child: MaterialApp(
+            home: Scaffold(
+              body: TodoItem(todo: todo),
+            ),
+          ),
+        ),
+      );
+
+      final checkboxListTile = find.widgetWithText(CheckboxListTile, 'title1');
+
+      await tester.drag(checkboxListTile, const Offset(-500, 0));
+      await tester.pumpAndSettle();
+
+      verify(() => todoCubit.deleteTodo(todo)).called(1);
+    },
+  );
 }
