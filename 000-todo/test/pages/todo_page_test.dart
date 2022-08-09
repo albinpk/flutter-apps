@@ -53,8 +53,11 @@ void main() {
 
         todoCubit.addTodo(todo);
         await tester.pump();
-        await tester.tap(find.widgetWithIcon(IconButton, Icons.delete));
-        await tester.pump();
+        await tester.drag(
+          find.widgetWithText(CheckboxListTile, 'title1'),
+          const Offset(-500, 0),
+        );
+        await tester.pumpAndSettle();
 
         expect(find.byType(SnackBar), findsOneWidget);
         expect(
@@ -78,8 +81,11 @@ void main() {
 
         todoCubit.addTodo(todo);
         await tester.pump();
-        await tester.tap(find.widgetWithIcon(IconButton, Icons.delete));
-        await tester.pump();
+        await tester.drag(
+          find.widgetWithText(CheckboxListTile, 'very very long title'),
+          const Offset(-500, 0),
+        );
+        await tester.pumpAndSettle();
 
         expect(find.byType(SnackBar), findsOneWidget);
         // Should replace characters after [15] to "..."
