@@ -51,3 +51,15 @@ class TodoDeleted extends TodoState {
   @override
   List<Object> get props => [deletedTodo, todos];
 }
+
+class TodoRestored extends TodoState {
+  const TodoRestored({
+    required this.restoredTodo,
+    required super.todos,
+  });
+
+  final Todo restoredTodo;
+
+  @override
+  List<Object> get props => [restoredTodo, todos];
+}
