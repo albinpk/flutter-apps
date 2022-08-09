@@ -34,6 +34,18 @@ class TodoCubit extends Cubit<TodoState> {
     );
   }
 
+  void undoDelete() {
+    final todos = [...state.todos];
+    assert(_lastDeletedTodoIndex <= todos.length);
+    todos.insert(_lastDeletedTodoIndex, _lastDeletedTodo);
+    emit(
+      TodoRestored(
+        restoredTodo: _lastDeletedTodo,
+        todos: todos,
+      ),
+    );
+  }
+
   void updateTodo(Todo updatedTodo) {
     final todos = [...state.todos];
     final index = todos.indexWhere((t) => t.id == updatedTodo.id);
