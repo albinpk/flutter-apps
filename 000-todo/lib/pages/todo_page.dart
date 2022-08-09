@@ -22,7 +22,33 @@ class TodoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TodoCubit, TodoState>(
+    return BlocConsumer<TodoCubit, TodoState>(
+      listener: (context, state) {
+        if (state is TodoDeleted) {
+          String todoTitle = state.deletedTodo.title;
+          if (todoTitle.length > 15) {
+            todoTitle = todoTitle.replaceRange(15, null, '...');
+          }
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: RichText(
+                  text: TextSpan(
+                    children: [
+                      const TextSpan(text: 'Todo '),
+                      TextSpan(
+                        text: '"$todoTitle"',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const TextSpan(text: ' deleted!')
+                    ],
+                  ),
+                ),
+              ),
+            );
+        }
+      },
       builder: (context, state) {
         if (state.todos.isEmpty) {
           return const Center(
