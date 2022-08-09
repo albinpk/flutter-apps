@@ -18,13 +18,17 @@ class TodoCubit extends Cubit<TodoState> {
     );
   }
 
+  late Todo _lastDeletedTodo;
+  late int _lastDeletedTodoIndex;
+
   void deleteTodo(Todo todo) {
     final todos = [...state.todos];
-    final isRemoved = todos.remove(todo);
-    assert(isRemoved);
+    _lastDeletedTodoIndex = todos.indexOf(todo);
+    assert(_lastDeletedTodoIndex != -1);
+    _lastDeletedTodo = todos.removeAt(_lastDeletedTodoIndex);
     emit(
       TodoDeleted(
-        deletedTodo: todo,
+        deletedTodo: _lastDeletedTodo,
         todos: todos,
       ),
     );
