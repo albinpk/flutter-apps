@@ -95,5 +95,33 @@ void main() {
         );
       },
     );
+
+    testWidgets(
+      'should restore deleted todo when "Undo" SnackBarAction pressed',
+      (tester) async {
+        final todo = Todo(title: 'title1');
+
+        await tester.pumpWidget(
+          BlocProvider<TodoCubit>(
+            create: (context) => todoCubit,
+            child: const MaterialApp(home: TodoPage()),
+          ),
+        );
+
+        todoCubit.addTodo(todo);
+        await tester.pump();
+        final todoTile = find.widgetWithText(CheckboxListTile, 'title1');
+        await tester.drag(todoTile, const Offset(-500, 0));
+        await tester.pumpAndSettle();
+
+        expect(todoTile, findsNothing);
+        final undoButton = find.text('Undo');
+        expect(undoButton, findsOneWidget);
+
+        await tester.tap(undoButton);
+        await tester.pump();
+        expect(todoTile, findsOneWidget);
+      },
+    );
   });
 }
