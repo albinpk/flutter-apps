@@ -37,4 +37,57 @@ void main() {
       expect(find.text('title1'), findsOneWidget);
     },
   );
+
+  group('SnackBar', () {
+    testWidgets(
+      'should show when a todo deleted',
+      (tester) async {
+        final todo = Todo(title: 'title1');
+
+        await tester.pumpWidget(
+          BlocProvider<TodoCubit>(
+            create: (context) => todoCubit,
+            child: const MaterialApp(home: TodoPage()),
+          ),
+        );
+
+        todoCubit.addTodo(todo);
+        await tester.pump();
+        await tester.tap(find.widgetWithIcon(IconButton, Icons.delete));
+        await tester.pump();
+
+        expect(find.byType(SnackBar), findsOneWidget);
+        expect(
+          find.text('Todo "title1" deleted!', findRichText: true),
+          findsOneWidget,
+        );
+      },
+    );
+
+    testWidgets(
+      'should replace title if length > 15',
+      (tester) async {
+        final todo = Todo(title: 'very very long title');
+
+        await tester.pumpWidget(
+          BlocProvider<TodoCubit>(
+            create: (context) => todoCubit,
+            child: const MaterialApp(home: TodoPage()),
+          ),
+        );
+
+        todoCubit.addTodo(todo);
+        await tester.pump();
+        await tester.tap(find.widgetWithIcon(IconButton, Icons.delete));
+        await tester.pump();
+
+        expect(find.byType(SnackBar), findsOneWidget);
+        // Should replace characters after [15] to "..."
+        expect(
+          find.text('Todo "very very long ..." deleted!', findRichText: true),
+          findsOneWidget,
+        );
+      },
+    );
+  });
 }
