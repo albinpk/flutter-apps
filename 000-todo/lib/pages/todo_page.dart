@@ -45,6 +45,12 @@ class TodoView extends StatelessWidget {
                     ],
                   ),
                 ),
+                action: SnackBarAction(
+                  label: 'Undo',
+                  onPressed: () {
+                    context.read<TodoCubit>().undoDelete();
+                  },
+                ),
               ),
             );
         }
