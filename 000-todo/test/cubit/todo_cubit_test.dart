@@ -45,6 +45,19 @@ void main() {
     );
 
     blocTest<TodoCubit, TodoState>(
+      'emits [TodoRestored] with restoredTodo when undoDelete() is called.',
+      build: () => todoCubit,
+      act: (bloc) => bloc
+        ..addTodo(todo1)
+        ..deleteTodo(todo1)
+        ..undoDelete(),
+      skip: 2,
+      expect: () => <TodoState>[
+        TodoRestored(restoredTodo: todo1, todos: [todo1]),
+      ],
+    );
+
+    blocTest<TodoCubit, TodoState>(
       'emits [TodoUpdated] with updatedTodo when updateTodo() is called.',
       build: () => todoCubit,
       act: (bloc) => bloc
