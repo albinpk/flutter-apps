@@ -19,6 +19,8 @@ class TodoPageAppBar extends StatelessWidget implements PreferredSizeWidget {
                   previous.doneCount != current.doneCount;
             },
             builder: (context, state) {
+              if (state.todos.isEmpty) return const SizedBox.shrink();
+
               return Text(
                 '${state.doneCount}/${state.todos.length}',
                 style: Theme.of(context)
