@@ -22,6 +22,9 @@ class TodoItem extends StatelessWidget {
     return Dismissible(
       key: ValueKey(todo),
       direction: DismissDirection.endToStart,
+      onDismissed: (_) {
+        context.read<TodoCubit>().deleteTodo(todo);
+      },
       background: const ColoredBox(
         color: Colors.red,
         child: Align(
