@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: "[bug]: "
+title: "bug(<scope>): "
 labels: bug
 assignees: albinpk
 ---
@@ -36,5 +36,5 @@ If applicable, add screenshots to help explain your problem.
 - Browser [e.g. stock browser, safari]
 - Version [e.g. 22]
 
-**Additional context**
-Add any other context about the problem here.
+**Notes**
+Add any other notes about the problem here.
