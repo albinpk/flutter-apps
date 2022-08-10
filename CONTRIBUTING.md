@@ -31,7 +31,7 @@ In short, when you submit code changes, your submissions will be understood unde
 
 We use GitHub issues to track public bugs. Report a bug by [opening a new issue](https://github.com/albinpk/flutter-apps/issues/new/choose); it's that easy!
 
-## Write bug reports using [this](https://github.com/albinpk/flutter-apps/issues/new?assignees=albinpk&labels=bug&template=bug_report.md&title=%5Bbug%5D%3A+) template
+## Write bug reports using [this](https://github.com/albinpk/flutter-apps/issues/new?assignees=albinpk&labels=bug&template=bug_report.md&title=bug%28%3Cscope%3E%29%3A+) template
 
 **Great Bug Reports** tend to have:
 
