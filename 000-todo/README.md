@@ -2,6 +2,8 @@
 
 [![000-todo](https://github.com/albinpk/flutter-apps/actions/workflows/000-todo.yaml/badge.svg?branch=master)](https://github.com/albinpk/flutter-apps/actions/workflows/000-todo.yaml)
 
+A simple todo app in flutter.
+
 ## Screenshots
 
 <p>
