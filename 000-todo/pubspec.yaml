@@ -16,6 +16,7 @@ dependencies:
   flutter_bloc: ^8.0.1
   uuid: ^3.0.6
   equatable: ^2.0.3
+  localstorage: ^4.0.0+1
 
 dev_dependencies:
   flutter_test:
