@@ -16,6 +16,20 @@ class TodoInitial extends TodoState {
   List<Object?> get props => [];
 }
 
+class TodoLoading extends TodoState {
+  const TodoLoading() : super(todos: const []);
+
+  @override
+  List<Object> get props => [];
+}
+
+class TodoFetched extends TodoState {
+  const TodoFetched({required super.todos});
+
+  @override
+  List<Object> get props => [todos];
+}
+
 class TodoAdded extends TodoState {
   const TodoAdded({
     required this.addedTodo,
