@@ -2,17 +2,22 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:todo/cubit/todo_cubit.dart';
 import 'package:todo/models/todo_model.dart';
+import 'package:todo/repositories/local_storage_todo_repository.dart';
+
+import '../mocks/mock_local_storage_todo_repository.dart';
 
 void main() {
   group('TodoCubit', () {
     late TodoCubit todoCubit;
+    late LocalStorageTodoRepository localStorageTodoRepository;
     final todo1 = Todo(title: 'title1', isDone: false);
     final todo1Toggled = todo1.copyWith(isDone: true);
     final todo2 = Todo(title: 'title2', isDone: true);
     final todo2Toggled = todo2.copyWith(isDone: false);
 
     setUp(() {
-      todoCubit = TodoCubit();
+      localStorageTodoRepository = MockLocalStorageTodoRepository();
+      todoCubit = TodoCubit(repository: localStorageTodoRepository);
     });
 
     test('TodoCubit should have an initial state of [TodoInitial]', () {
