@@ -56,4 +56,14 @@ class Todo extends Equatable {
       isDone: isDone ?? this.isDone,
     );
   }
+
+  @override
+  String toString() {
+    return 'Todo('
+        '${id.substring(0, 8)}, '
+        '$title, '
+        '$isDone'
+        '${description.isNotEmpty ? ', $description' : ""}'
+        ')';
+  }
 }
