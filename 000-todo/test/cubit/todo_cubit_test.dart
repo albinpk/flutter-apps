@@ -1,5 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:todo/cubit/todo_cubit.dart';
 import 'package:todo/models/todo_model.dart';
 import 'package:todo/repositories/local_storage_todo_repository.dart';
@@ -18,11 +19,24 @@ void main() {
     setUp(() {
       localStorageTodoRepository = MockLocalStorageTodoRepository();
       todoCubit = TodoCubit(repository: localStorageTodoRepository);
+      when(
+        () => localStorageTodoRepository.setTodos(any<List<Todo>>()),
+      ).thenAnswer((_) async {});
+      when(
+        () => localStorageTodoRepository.getTodos(),
+      ).thenAnswer((_) async => []);
     });
 
     test('TodoCubit should have an initial state of [TodoInitial]', () {
       expect(todoCubit.state, const TodoInitial());
     });
+
+    blocTest<TodoCubit, TodoState>(
+      'emits [TodoLoading, TodoFetched] when getTodos() is called.',
+      build: () => todoCubit,
+      act: (bloc) => bloc.getTodos(),
+      expect: () => const <TodoState>[TodoLoading(), TodoFetched(todos: [])],
+    );
 
     blocTest<TodoCubit, TodoState>(
       'emits [TodoAdded] with addedTodo when addTodo() is called. '
