@@ -51,7 +51,8 @@ void main() {
 
     blocTest<TodoCubit, TodoState>(
       'emits [TodoAdded] with addedTodo when addTodo() is called. '
-      'and new todo should add to the top of list',
+      'and new todo should add to the top of list '
+      'and should call repository.setTodos() with added todos',
       build: () => todoCubit,
       act: (bloc) => bloc
         ..addTodo(todo1)
@@ -60,6 +61,12 @@ void main() {
         TodoAdded(addedTodo: todo1, todos: [todo1]),
         TodoAdded(addedTodo: todo2, todos: [todo2, todo1]),
       ],
+      tearDown: () {
+        verify(() => localStorageTodoRepository.setTodos([todo1])).called(1);
+        verify(
+          () => localStorageTodoRepository.setTodos([todo2, todo1]),
+        ).called(1);
+      },
     );
 
     blocTest<TodoCubit, TodoState>(
