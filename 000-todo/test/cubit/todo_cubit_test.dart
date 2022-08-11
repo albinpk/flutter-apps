@@ -32,10 +32,14 @@ void main() {
     });
 
     blocTest<TodoCubit, TodoState>(
-      'emits [TodoLoading, TodoFetched] when getTodos() is called.',
+      'emits [TodoLoading, TodoFetched] when getTodos() is called. '
+      'and should call repository.getTodos()',
       build: () => todoCubit,
       act: (bloc) => bloc.getTodos(),
       expect: () => const <TodoState>[TodoLoading(), TodoFetched(todos: [])],
+      tearDown: () {
+        verify(() => localStorageTodoRepository.getTodos()).called(1);
+      },
     );
 
     blocTest<TodoCubit, TodoState>(
