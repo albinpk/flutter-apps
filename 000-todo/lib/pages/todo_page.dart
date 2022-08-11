@@ -56,6 +56,12 @@ class TodoView extends StatelessWidget {
         }
       },
       builder: (context, state) {
+        if (state is TodoLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
         if (state.todos.isEmpty) {
           return const Center(
             child: Text('Create a todo'),
