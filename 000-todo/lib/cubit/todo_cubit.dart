@@ -74,4 +74,14 @@ class TodoCubit extends Cubit<TodoState> {
   void toggleIsDone(Todo todo) {
     updateTodo(todo.copyWith(isDone: !todo.isDone));
   }
+
+  @override
+  Future<void> onChange(Change<TodoState> change) async {
+    super.onChange(change);
+    if (change.nextState is! TodoInitial &&
+        change.nextState is! TodoFetched &&
+        change.nextState is! TodoLoading) {
+      await _repository.setTodos(change.nextState.todos);
+    }
+  }
 }
