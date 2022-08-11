@@ -21,7 +21,7 @@ void main() {
     });
 
     test('TodoCubit should have an initial state of [TodoInitial]', () {
-      expect(todoCubit.state, isA<TodoInitial>());
+      expect(todoCubit.state, const TodoInitial());
     });
 
     blocTest<TodoCubit, TodoState>(
