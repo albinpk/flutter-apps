@@ -27,9 +27,14 @@ void main() {
       ).thenAnswer((_) async => []);
     });
 
-    test('TodoCubit should have an initial state of [TodoInitial]', () {
-      expect(todoCubit.state, const TodoInitial());
-    });
+    test(
+      'TodoCubit should have an initial state of [TodoInitial] '
+      'and should not call repository.setTodos()',
+      () {
+        expect(todoCubit.state, const TodoInitial());
+        verifyNever(() => localStorageTodoRepository.setTodos(any()));
+      },
+    );
 
     blocTest<TodoCubit, TodoState>(
       'emits [TodoLoading, TodoFetched] when getTodos() is called. '
