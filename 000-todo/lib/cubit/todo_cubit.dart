@@ -79,8 +79,8 @@ class TodoCubit extends Cubit<TodoState> {
   void onChange(Change<TodoState> change) async {
     super.onChange(change);
     if (change.nextState is! TodoInitial &&
-        change.nextState is! TodoFetched &&
-        change.nextState is! TodoLoading) {
+        change.nextState is! TodoLoading &&
+        change.nextState is! TodoFetched) {
       await _repository.setTodos(change.nextState.todos);
     }
   }
