@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:todo/cubit/todo_cubit.dart';
 import 'package:todo/models/models.dart';
+import 'package:todo/repositories/repositories.dart';
 import 'package:todo/widgets/widgets.dart';
 
+import '../mocks/mock_local_storage_todo_repository.dart';
+
 void main() {
+  late LocalStorageTodoRepository localStorageTodoRepository;
   late TodoCubit todoCubit;
 
   setUp(() {
-    todoCubit = TodoCubit();
+    localStorageTodoRepository = MockLocalStorageTodoRepository();
+    todoCubit = TodoCubit(repository: localStorageTodoRepository);
+    when(
+      () => localStorageTodoRepository.setTodos(any<List<Todo>>()),
+    ).thenAnswer((_) async {});
   });
 
   testWidgets(
