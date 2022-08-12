@@ -76,7 +76,7 @@ class TodoCubit extends Cubit<TodoState> {
   }
 
   @override
-  Future<void> onChange(Change<TodoState> change) async {
+  void onChange(Change<TodoState> change) async {
     super.onChange(change);
     if (change.nextState is! TodoInitial &&
         change.nextState is! TodoFetched &&
