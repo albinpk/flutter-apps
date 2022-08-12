@@ -15,7 +15,8 @@ void main() {
   });
 
   testWidgets(
-    'TodoApp should have MateriaApp with title and TodoPage widget',
+    'TodoApp should have MateriaApp with title and TodoPage widget '
+    'and should call todoCubit.getTodos() when BlocProvider created',
     (tester) async {
       await tester.pumpWidget(TodoApp(localStorage: localStorage));
 
@@ -24,6 +25,8 @@ void main() {
       expect(materialApp, findsOneWidget);
       expect(find.byType(TodoPage), findsOneWidget);
       expect(tester.widget<MaterialApp>(materialApp).title, 'Todo');
+      // localStorage.getItem() will called from getTodos() method in TodoCubit
+      verify(() => localStorage.getItem(any())).called(1);
     },
   );
 }
