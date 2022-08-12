@@ -60,7 +60,7 @@ class Todo extends Equatable {
   @override
   String toString() {
     return 'Todo('
-        '${id.substring(0, 8)}, '
+        '${id.length > 8 ? id.substring(0, 8) : id}, '
         '$title, '
         '$isDone'
         '${description.isNotEmpty ? ', $description' : ""}'
