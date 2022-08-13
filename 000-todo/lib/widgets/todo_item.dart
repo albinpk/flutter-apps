@@ -15,10 +15,8 @@ class TodoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = Theme.of(context).textTheme.titleMedium?.copyWith(
-          decoration: todo.isDone ? TextDecoration.lineThrough : null,
-          fontWeight: todo.isDone ? null : FontWeight.w500,
-        );
+    if (MediaQuery.of(context).size.width > 600) return _TodoTile(todo: todo);
+
     return Dismissible(
       key: ValueKey(todo),
       direction: DismissDirection.endToStart,
@@ -35,18 +33,52 @@ class TodoItem extends StatelessWidget {
           ),
         ),
       ),
-      child: CheckboxListTile(
-        value: todo.isDone,
-        title: Text(todo.title, style: style),
-        subtitle: todo.description.isNotEmpty ? Text(todo.description) : null,
-        controlAffinity: ListTileControlAffinity.leading,
-        onChanged: (_) {
-          context.read<TodoCubit>().toggleIsDone(todo);
-        },
-        secondary: IconButton(
-          tooltip: 'Edit',
-          onPressed: () => _onEditTap(context),
-          icon: const Icon(Icons.edit),
+      child: _TodoTile(todo: todo),
+    );
+  }
+}
+
+class _TodoTile extends StatelessWidget {
+  final Todo todo;
+
+  const _TodoTile({
+    Key? key,
+    required this.todo,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final style = Theme.of(context).textTheme.titleMedium?.copyWith(
+          decoration: todo.isDone ? TextDecoration.lineThrough : null,
+          fontWeight: todo.isDone ? null : FontWeight.w500,
+        );
+    return Center(
+      child: SizedBox(
+        width: 600,
+        child: CheckboxListTile(
+          value: todo.isDone,
+          title: Text(todo.title, style: style),
+          subtitle: todo.description.isNotEmpty ? Text(todo.description) : null,
+          controlAffinity: ListTileControlAffinity.leading,
+          onChanged: (_) {
+            context.read<TodoCubit>().toggleIsDone(todo);
+          },
+          secondary: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                tooltip: 'Edit',
+                onPressed: () => _onEditTap(context),
+                icon: const Icon(Icons.edit),
+              ),
+              if (MediaQuery.of(context).size.width > 600)
+                IconButton(
+                  tooltip: 'Delete',
+                  onPressed: () => context.read<TodoCubit>().deleteTodo(todo),
+                  icon: const Icon(Icons.delete),
+                )
+            ],
+          ),
         ),
       ),
     );
