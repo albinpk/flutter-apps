@@ -35,6 +35,11 @@ class TodoView extends StatelessWidget {
               SnackBar(
                 content: RichText(
                   text: TextSpan(
+                    style: TextStyle(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.black
+                          : Colors.white,
+                    ),
                     children: [
                       const TextSpan(text: 'Todo '),
                       TextSpan(
