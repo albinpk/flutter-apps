@@ -89,7 +89,7 @@ void main() {
   );
 
   testWidgets(
-    'should call deleteTodo() with given todo when dismiss to left',
+    'should call deleteTodo() with given todo when dismiss to left on small screen',
     (tester) async {
       final todo = Todo(title: 'title1');
 
@@ -114,6 +114,38 @@ void main() {
 
       await tester.drag(checkboxListTile, const Offset(-500, 0));
       await tester.pumpAndSettle();
+
+      verify(() => todoCubit.deleteTodo(todo)).called(1);
+    },
+  );
+
+  testWidgets(
+    'should call deleteTodo() with given todo when delete button pressed on large screen',
+    (tester) async {
+      final todo = Todo(title: 'title1');
+
+      final dpi = tester.binding.window.devicePixelRatio;
+      tester.binding.window.physicalSizeTestValue = Size(601 * dpi, 1000 * dpi);
+
+      await tester.pumpWidget(
+        BlocProvider<TodoCubit>(
+          create: (context) => todoCubit,
+          child: MaterialApp(
+            home: Scaffold(
+              body: TodoItem(todo: todo),
+            ),
+          ),
+        ),
+      );
+
+      final dismissible = find.byType(Dismissible);
+      final deleteButton = find.widgetWithIcon(IconButton, Icons.delete);
+
+      expect(tester.widget<IconButton>(deleteButton).tooltip, 'Delete');
+      expect(dismissible, findsNothing);
+      expect(deleteButton, findsOneWidget);
+
+      await tester.tap(deleteButton);
 
       verify(() => todoCubit.deleteTodo(todo)).called(1);
     },
