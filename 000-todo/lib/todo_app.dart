@@ -20,9 +20,10 @@ class TodoApp extends StatelessWidget {
       create: (context) => TodoCubit(
         repository: LocalStorageTodoRepository(localStorage),
       )..getTodos(),
-      child: const MaterialApp(
+      child: MaterialApp(
         title: 'Todo',
-        home: TodoPage(),
+        darkTheme: ThemeData.dark(),
+        home: const TodoPage(),
       ),
     );
   }
