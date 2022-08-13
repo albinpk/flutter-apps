@@ -23,66 +23,69 @@ class _TodoFormState extends State<TodoForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  widget.todo == null ? 'New Todo' : 'Edit Todo',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  initialValue: widget.todo?.title,
-                  autofocus: true,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    label: Text('Title'),
+    return SizedBox(
+      width: 600,
+      child: Form(
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    widget.todo == null ? 'New Todo' : 'Edit Todo',
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
-                  textCapitalization: TextCapitalization.sentences,
-                  textInputAction: TextInputAction.next,
-                  validator: (value) {
-                    if (value?.trim().isEmpty ?? true) {
-                      return 'Please enter todo title';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) => _title = value!.trim(),
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  initialValue: widget.todo?.description,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    label: Text('Description'),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    initialValue: widget.todo?.title,
+                    autofocus: true,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      label: Text('Title'),
+                    ),
+                    textCapitalization: TextCapitalization.sentences,
+                    textInputAction: TextInputAction.next,
+                    validator: (value) {
+                      if (value?.trim().isEmpty ?? true) {
+                        return 'Please enter todo title';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) => _title = value!.trim(),
                   ),
-                  textCapitalization: TextCapitalization.sentences,
-                  maxLines: 3,
-                  onSaved: (value) => _description = value?.trim() ?? '',
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: const Text('Cancel'),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    initialValue: widget.todo?.description,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      label: Text('Description'),
                     ),
-                    const SizedBox(width: 10),
-                    ElevatedButton(
-                      onPressed: _onSave,
-                      child: const Text('Save'),
-                    ),
-                  ],
-                )
-              ],
+                    textCapitalization: TextCapitalization.sentences,
+                    maxLines: 3,
+                    onSaved: (value) => _description = value?.trim() ?? '',
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text('Cancel'),
+                      ),
+                      const SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: _onSave,
+                        child: const Text('Save'),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
