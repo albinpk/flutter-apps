@@ -93,6 +93,9 @@ void main() {
     (tester) async {
       final todo = Todo(title: 'title1');
 
+      final dpi = tester.binding.window.devicePixelRatio;
+      tester.binding.window.physicalSizeTestValue = Size(600 * dpi, 1000 * dpi);
+
       await tester.pumpWidget(
         BlocProvider<TodoCubit>(
           create: (context) => todoCubit,
@@ -103,6 +106,9 @@ void main() {
           ),
         ),
       );
+
+      final dismissible = find.byType(Dismissible);
+      expect(dismissible, findsOneWidget);
 
       final checkboxListTile = find.widgetWithText(CheckboxListTile, 'title1');
 

@@ -81,6 +81,10 @@ void main() {
       (tester) async {
         final todo = Todo(title: 'title1');
 
+        final dpi = tester.binding.window.devicePixelRatio;
+        tester.binding.window.physicalSizeTestValue =
+            Size(600 * dpi, 1000 * dpi);
+
         await tester.pumpWidget(
           BlocProvider<TodoCubit>(
             create: (context) => todoCubit,
@@ -108,6 +112,10 @@ void main() {
       'should replace title if length > 15',
       (tester) async {
         final todo = Todo(title: 'very very long title');
+
+        final dpi = tester.binding.window.devicePixelRatio;
+        tester.binding.window.physicalSizeTestValue =
+            Size(600 * dpi, 1000 * dpi);
 
         await tester.pumpWidget(
           BlocProvider<TodoCubit>(
@@ -137,6 +145,10 @@ void main() {
       'should restore deleted todo when "Undo" SnackBarAction pressed',
       (tester) async {
         final todo = Todo(title: 'title1');
+
+        final dpi = tester.binding.window.devicePixelRatio;
+        tester.binding.window.physicalSizeTestValue =
+            Size(600 * dpi, 1000 * dpi);
 
         await tester.pumpWidget(
           BlocProvider<TodoCubit>(
