@@ -20,6 +20,11 @@ void main() {
     when(
       () => localStorageTodoRepository.setTodos(any<List<Todo>>()),
     ).thenAnswer((_) async {});
+    when(
+      () => localStorageTodoRepository.getTodos(),
+    ).thenAnswer(
+      (_) => Future.delayed(Duration.zero, () => []),
+    );
   });
 
   testWidgets(
@@ -44,6 +49,29 @@ void main() {
 
       expect(find.text('Create a todo'), findsNothing);
       expect(find.text('title1'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'should show a progress indicator when TodoState in TodoLoading',
+    (tester) async {
+      await tester.pumpWidget(
+        BlocProvider<TodoCubit>(
+          create: (context) => todoCubit,
+          child: const MaterialApp(home: TodoPage()),
+        ),
+      );
+
+      final progressIndicator = find.byType(CircularProgressIndicator);
+      expect(progressIndicator, findsNothing);
+
+      todoCubit.getTodos();
+      await tester.pump();
+      expect(progressIndicator, findsOneWidget);
+
+      await tester.pumpAndSettle();
+      expect(progressIndicator, findsNothing);
+      expect(find.text('Create a todo'), findsOneWidget);
     },
   );
 
