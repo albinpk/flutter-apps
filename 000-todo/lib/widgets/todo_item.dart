@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,7 +16,7 @@ class TodoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (MediaQuery.of(context).size.width > 600) return _TodoTile(todo: todo);
+    if (kIsWeb) return _TodoTile(todo: todo);
 
     return Dismissible(
       key: ValueKey(todo),
@@ -54,7 +55,7 @@ class _TodoTile extends StatelessWidget {
         );
     return Center(
       child: SizedBox(
-        width: 600,
+        width: kIsWeb ? 600 : null,
         child: CheckboxListTile(
           value: todo.isDone,
           title: Text(todo.title, style: style),
@@ -71,7 +72,7 @@ class _TodoTile extends StatelessWidget {
                 onPressed: () => _onEditTap(context),
                 icon: const Icon(Icons.edit),
               ),
-              if (MediaQuery.of(context).size.width > 600)
+              if (kIsWeb)
                 IconButton(
                   tooltip: 'Delete',
                   onPressed: () => context.read<TodoCubit>().deleteTodo(todo),

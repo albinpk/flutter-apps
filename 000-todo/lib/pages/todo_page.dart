@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,10 +34,13 @@ class TodoView extends StatelessWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
-                behavior: MediaQuery.of(context).size.width > 600
-                    ? SnackBarBehavior.floating
-                    : SnackBarBehavior.fixed,
-                width: MediaQuery.of(context).size.width > 600 ? 400 : null,
+                behavior:
+                    kIsWeb ? SnackBarBehavior.floating : SnackBarBehavior.fixed,
+                width: kIsWeb
+                    ? MediaQuery.of(context).size.width > 600
+                        ? 550
+                        : null
+                    : null,
                 content: RichText(
                   text: TextSpan(
                     style: TextStyle(
@@ -78,9 +82,7 @@ class TodoView extends StatelessWidget {
         }
 
         return ListView.builder(
-          itemCount: MediaQuery.of(context).size.width > 750
-              ? state.todos.length
-              : state.todos.length + 1,
+          itemCount: state.todos.length + 1,
           itemBuilder: (context, i) {
             if (i == state.todos.length) return const SizedBox(height: 80);
 
