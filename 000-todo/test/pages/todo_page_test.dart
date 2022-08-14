@@ -32,6 +32,9 @@ void main() {
     'TodoView and TodoPageFab. '
     'And should show info text if todos list is empty',
     (tester) async {
+      final dpi = tester.binding.window.devicePixelRatio;
+      tester.binding.window.physicalSizeTestValue = Size(751 * dpi, 1000 * dpi);
+
       await tester.pumpWidget(
         BlocProvider<TodoCubit>(
           create: (context) => todoCubit,
