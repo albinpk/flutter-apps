@@ -1,8 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../cubit/todo_cubit.dart';
+import '../utils/test_helper.dart';
 import '../widgets/widgets.dart';
 
 class TodoPage extends StatelessWidget {
@@ -30,13 +30,16 @@ class TodoView extends StatelessWidget {
           if (todoTitle.length > 15) {
             todoTitle = todoTitle.replaceRange(15, null, '...');
           }
+
+          final isWeb = context.read<TestHelper>().isWeb;
+
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
                 behavior:
-                    kIsWeb ? SnackBarBehavior.floating : SnackBarBehavior.fixed,
-                width: kIsWeb
+                    isWeb ? SnackBarBehavior.floating : SnackBarBehavior.fixed,
+                width: isWeb
                     ? MediaQuery.of(context).size.width > 600
                         ? 550
                         : null
