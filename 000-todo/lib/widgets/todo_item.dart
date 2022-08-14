@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo/utils/test_helper.dart';
 
 import '../cubit/todo_cubit.dart';
 import '../models/models.dart';
@@ -16,7 +16,9 @@ class TodoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (kIsWeb) return _TodoTile(todo: todo);
+    if (context.select<TestHelper, bool>((s) => s.isWeb)) {
+      return _TodoTile(todo: todo);
+    }
 
     return Dismissible(
       key: ValueKey(todo),
@@ -49,13 +51,15 @@ class _TodoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isWeb = context.select<TestHelper, bool>((s) => s.isWeb);
+
     final style = Theme.of(context).textTheme.titleMedium?.copyWith(
           decoration: todo.isDone ? TextDecoration.lineThrough : null,
           fontWeight: todo.isDone ? null : FontWeight.w500,
         );
     return Center(
       child: SizedBox(
-        width: kIsWeb ? 600 : null,
+        width: isWeb ? 600 : null,
         child: CheckboxListTile(
           value: todo.isDone,
           title: Text(todo.title, style: style),
@@ -72,7 +76,7 @@ class _TodoTile extends StatelessWidget {
                 onPressed: () => _onEditTap(context),
                 icon: const Icon(Icons.edit),
               ),
-              if (kIsWeb)
+              if (isWeb)
                 IconButton(
                   tooltip: 'Delete',
                   onPressed: () => context.read<TodoCubit>().deleteTodo(todo),
