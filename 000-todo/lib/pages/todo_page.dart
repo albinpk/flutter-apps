@@ -78,8 +78,12 @@ class TodoView extends StatelessWidget {
         }
 
         return ListView.builder(
-          itemCount: state.todos.length,
+          itemCount: MediaQuery.of(context).size.width > 750
+              ? state.todos.length
+              : state.todos.length + 1,
           itemBuilder: (context, i) {
+            if (i == state.todos.length) return const SizedBox(height: 80);
+
             return TodoItem(todo: state.todos[i]);
           },
         );
