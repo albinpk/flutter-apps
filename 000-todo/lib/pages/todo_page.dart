@@ -33,6 +33,10 @@ class TodoView extends StatelessWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
+                behavior: MediaQuery.of(context).size.width > 600
+                    ? SnackBarBehavior.floating
+                    : SnackBarBehavior.fixed,
+                width: MediaQuery.of(context).size.width > 600 ? 400 : null,
                 content: RichText(
                   text: TextSpan(
                     style: TextStyle(
