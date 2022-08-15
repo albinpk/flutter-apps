@@ -81,7 +81,7 @@ class _TodoTile extends StatelessWidget {
                   tooltip: 'Delete',
                   onPressed: () => context.read<TodoCubit>().deleteTodo(todo),
                   icon: const Icon(Icons.delete),
-                )
+                ),
             ],
           ),
         ),
