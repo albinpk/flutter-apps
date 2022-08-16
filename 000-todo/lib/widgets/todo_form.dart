@@ -38,6 +38,7 @@ class _TodoFormState extends State<TodoForm> {
                 children: [
                   Text(
                     widget.todo == null ? 'New Todo' : 'Edit Todo',
+                    key: const Key('todo-form-title-text'),
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 20),
