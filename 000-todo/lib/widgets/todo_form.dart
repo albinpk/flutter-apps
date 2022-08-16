@@ -95,26 +95,25 @@ class _TodoFormState extends State<TodoForm> {
   }
 
   void _onSave() {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
+    if (!_formKey.currentState!.validate()) return;
 
-      if (widget.todo == null) {
-        context.read<TodoCubit>().addTodo(
-              Todo(
-                title: _title,
-                description: _description,
-              ),
-            );
-      } else {
-        context.read<TodoCubit>().updateTodo(
-              widget.todo!.copyWith(
-                title: _title,
-                description: _description,
-              ),
-            );
-      }
-
-      Navigator.of(context).pop();
+    _formKey.currentState!.save();
+    if (widget.todo == null) {
+      context.read<TodoCubit>().addTodo(
+            Todo(
+              title: _title,
+              description: _description,
+            ),
+          );
+    } else {
+      context.read<TodoCubit>().updateTodo(
+            widget.todo!.copyWith(
+              title: _title,
+              description: _description,
+            ),
+          );
     }
+
+    Navigator.of(context).pop();
   }
 }
