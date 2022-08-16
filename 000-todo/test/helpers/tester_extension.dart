@@ -10,7 +10,10 @@ import '../mocks/mock_app_service.dart';
 extension TesterExtension on WidgetTester {
   /// Wrap given `widget` with [TestHelper], [MaterialApp] and [Scaffold].
   ///
-  /// Wrap the widget with [BlocProvider] if `todoCubit` is not null
+  /// Wrap the `widget` with [BlocProvider] if `todoCubit` is not null
+  ///
+  /// Wrap the `widget` with mocked [TestHelper],
+  /// and stub [TestHelper.isWeb] getter to return `inWeb`.
   Future<void> pumpAndWrap(
     Widget widget, {
     bool withScaffold = true,
