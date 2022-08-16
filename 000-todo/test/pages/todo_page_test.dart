@@ -1,179 +1,124 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:todo/cubit/todo_cubit.dart';
-import 'package:todo/models/todo_model.dart';
+import 'package:todo/models/models.dart';
 import 'package:todo/pages/pages.dart';
-import 'package:todo/repositories/repositories.dart';
 import 'package:todo/widgets/widgets.dart';
 
-import '../mocks/mock_local_storage_todo_repository.dart';
+import '../helpers/tester_extension.dart';
+import '../mocks/mocks.dart';
 
 void main() {
-  late LocalStorageTodoRepository localStorageTodoRepository;
-  late TodoCubit todoCubit;
+  group('TodoPage', () {
+    late TodoCubit todoCubit;
+    final todo = Todo(title: 'T');
 
-  setUp(() {
-    localStorageTodoRepository = MockLocalStorageTodoRepository();
-    todoCubit = TodoCubit(repository: localStorageTodoRepository);
-    when(
-      () => localStorageTodoRepository.setTodos(any<List<Todo>>()),
-    ).thenAnswer((_) async {});
-    when(
-      () => localStorageTodoRepository.getTodos(),
-    ).thenAnswer(
-      (_) => Future.delayed(Duration.zero, () => []),
-    );
-  });
+    setUp(() {
+      todoCubit = MockTodoCubit();
+      when(() => todoCubit.state).thenReturn(const TodoInitial());
+    });
 
-  testWidgets(
-    'TodoPage should have TodoPageAppBar, '
-    'TodoView and TodoPageFab. '
-    'And should show info text if todos list is empty',
-    (tester) async {
-      final dpi = tester.binding.window.devicePixelRatio;
-      tester.binding.window.physicalSizeTestValue = Size(751 * dpi, 1000 * dpi);
+    // Finders
+    final progressIndicator = find.byType(CircularProgressIndicator);
+    final noTodosText = find.text('Create a todo');
+    final listView = find.byType(ListView);
 
-      await tester.pumpWidget(
-        BlocProvider<TodoCubit>(
-          create: (context) => todoCubit,
-          child: const MaterialApp(home: TodoPage()),
-        ),
-      );
-
-      expect(find.byType(TodoPageAppBar), findsOneWidget);
-      expect(find.byType(TodoView), findsOneWidget);
-      expect(find.text('Create a todo'), findsOneWidget);
-      expect(find.byType(TodoPageFab), findsOneWidget);
-
-      todoCubit.addTodo(Todo(title: 'title1'));
-      await tester.pump();
-
-      expect(find.text('Create a todo'), findsNothing);
-      expect(find.text('title1'), findsOneWidget);
-    },
-  );
-
-  testWidgets(
-    'should show a progress indicator when TodoState in TodoLoading',
-    (tester) async {
-      await tester.pumpWidget(
-        BlocProvider<TodoCubit>(
-          create: (context) => todoCubit,
-          child: const MaterialApp(home: TodoPage()),
-        ),
-      );
-
-      final progressIndicator = find.byType(CircularProgressIndicator);
-      expect(progressIndicator, findsNothing);
-
-      todoCubit.getTodos();
-      await tester.pump();
-      expect(progressIndicator, findsOneWidget);
-
-      await tester.pumpAndSettle();
-      expect(progressIndicator, findsNothing);
-      expect(find.text('Create a todo'), findsOneWidget);
-    },
-  );
-
-  group('SnackBar', () {
-    testWidgets(
-      'should show when a todo deleted',
-      (tester) async {
-        final todo = Todo(title: 'title1');
-
-        final dpi = tester.binding.window.devicePixelRatio;
-        tester.binding.window.physicalSizeTestValue =
-            Size(600 * dpi, 1000 * dpi);
-
-        await tester.pumpWidget(
-          BlocProvider<TodoCubit>(
-            create: (context) => todoCubit,
-            child: const MaterialApp(home: TodoPage()),
-          ),
+    for (final isWeb in [true, false]) {
+      group('(${isWeb ? 'web' : 'mobile'})', () {
+        testWidgets(
+          'should have TodoView, TodoPageAppBar and TodoPageFab',
+          (tester) async {
+            await tester.pumpAndWrap(
+              const TodoPage(),
+              withScaffold: false,
+              todoCubit: todoCubit,
+              inWeb: isWeb,
+            );
+            expect(find.byType(TodoView), findsOneWidget);
+            expect(find.byType(TodoPageAppBar), findsOneWidget);
+            expect(find.byType(TodoPageFab), findsOneWidget);
+          },
         );
 
-        todoCubit.addTodo(todo);
-        await tester.pump();
-        await tester.drag(
-          find.widgetWithText(CheckboxListTile, 'title1'),
-          const Offset(-500, 0),
-        );
-        await tester.pumpAndSettle();
+        group('TodoView', () {
+          testWidgets(
+            'should render progress indicator if TodoState is TodoLoading',
+            (tester) async {
+              when(() => todoCubit.state).thenReturn(const TodoLoading());
+              await tester.pumpAndWrap(
+                const TodoView(),
+                todoCubit: todoCubit,
+                inWeb: isWeb,
+              );
+              expect(progressIndicator, findsOneWidget);
+              expect(noTodosText, findsNothing);
+              expect(listView, findsNothing);
+            },
+          );
 
-        expect(find.byType(SnackBar), findsOneWidget);
-        expect(
-          find.text('Todo "title1" deleted!', findRichText: true),
-          findsOneWidget,
-        );
-      },
-    );
+          testWidgets(
+            'should render info text if todos list is empty',
+            (tester) async {
+              when(() => todoCubit.state).thenReturn(
+                const TodoFetched(todos: []),
+              );
+              await tester.pumpAndWrap(
+                const TodoView(),
+                todoCubit: todoCubit,
+                inWeb: isWeb,
+              );
+              expect(noTodosText, findsOneWidget);
+              expect(progressIndicator, findsNothing);
+              expect(listView, findsNothing);
+            },
+          );
 
-    testWidgets(
-      'should replace title if length > 15',
-      (tester) async {
-        final todo = Todo(title: 'very very long title');
+          testWidgets(
+            'should render ListView with todo if todos list is not empty',
+            (tester) async {
+              when(() => todoCubit.state).thenReturn(
+                TodoFetched(todos: [todo]),
+              );
+              await tester.pumpAndWrap(
+                const TodoView(),
+                todoCubit: todoCubit,
+                inWeb: isWeb,
+              );
+              expect(listView, findsOneWidget);
+              expect(find.widgetWithText(TodoItem, todo.title), findsOneWidget);
+              expect(progressIndicator, findsNothing);
+              expect(noTodosText, findsNothing);
+            },
+          );
 
-        final dpi = tester.binding.window.devicePixelRatio;
-        tester.binding.window.physicalSizeTestValue =
-            Size(600 * dpi, 1000 * dpi);
-
-        await tester.pumpWidget(
-          BlocProvider<TodoCubit>(
-            create: (context) => todoCubit,
-            child: const MaterialApp(home: TodoPage()),
-          ),
-        );
-
-        todoCubit.addTodo(todo);
-        await tester.pump();
-        await tester.drag(
-          find.widgetWithText(CheckboxListTile, 'very very long title'),
-          const Offset(-500, 0),
-        );
-        await tester.pumpAndSettle();
-
-        expect(find.byType(SnackBar), findsOneWidget);
-        // Should replace characters after [15] to "..."
-        expect(
-          find.text('Todo "very very long ..." deleted!', findRichText: true),
-          findsOneWidget,
-        );
-      },
-    );
-
-    testWidgets(
-      'should restore deleted todo when "Undo" SnackBarAction pressed',
-      (tester) async {
-        final todo = Todo(title: 'title1');
-
-        final dpi = tester.binding.window.devicePixelRatio;
-        tester.binding.window.physicalSizeTestValue =
-            Size(600 * dpi, 1000 * dpi);
-
-        await tester.pumpWidget(
-          BlocProvider<TodoCubit>(
-            create: (context) => todoCubit,
-            child: const MaterialApp(home: TodoPage()),
-          ),
-        );
-
-        todoCubit.addTodo(todo);
-        await tester.pump();
-        final todoTile = find.widgetWithText(CheckboxListTile, 'title1');
-        await tester.drag(todoTile, const Offset(-500, 0));
-        await tester.pumpAndSettle();
-
-        expect(todoTile, findsNothing);
-        final undoButton = find.text('Undo');
-        expect(undoButton, findsOneWidget);
-
-        await tester.tap(undoButton);
-        await tester.pump();
-        expect(todoTile, findsOneWidget);
-      },
-    );
+          // Snackbar test
+          testWidgets(
+            'should show a snackbar if TodoState is TodoDeleted, and should '
+            'call TodoCubit.undoDelete when action button(Undo) pressed',
+            (tester) async {
+              when(() => todoCubit.stream).thenAnswer(
+                (_) => Stream.fromIterable(
+                  [TodoDeleted(deletedTodo: todo, todos: const [])],
+                ),
+              );
+              await tester.pumpAndWrap(
+                const TodoView(),
+                todoCubit: todoCubit,
+                inWeb: isWeb,
+              );
+              await tester.pumpAndSettle();
+              expect(find.byType(SnackBar), findsOneWidget);
+              expect(
+                find.text('Todo "${todo.title}" deleted!', findRichText: true),
+                findsOneWidget,
+              );
+              await tester.tap(find.text('Undo'));
+              verify(() => todoCubit.undoDelete()).called(1);
+            },
+          );
+        });
+      });
+    }
   });
 }
