@@ -1,63 +1,101 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:todo/cubit/todo_cubit.dart';
 import 'package:todo/models/models.dart';
-import 'package:todo/repositories/repositories.dart';
 import 'package:todo/widgets/widgets.dart';
 
-import '../mocks/mock_local_storage_todo_repository.dart';
+import '../helpers/tester_extension.dart';
+import '../mocks/mock_todo_cubit.dart';
 
 void main() {
-  late LocalStorageTodoRepository localStorageTodoRepository;
-  late TodoCubit todoCubit;
+  group('TodoPageAppBar', () {
+    late TodoCubit todoCubit;
+    final todo = Todo(title: 'T');
 
-  setUp(() {
-    localStorageTodoRepository = MockLocalStorageTodoRepository();
-    todoCubit = TodoCubit(repository: localStorageTodoRepository);
-    when(
-      () => localStorageTodoRepository.setTodos(any<List<Todo>>()),
-    ).thenAnswer((_) async {});
-  });
+    setUp(() {
+      todoCubit = MockTodoCubit();
+      when(() => todoCubit.state).thenReturn(const TodoInitial());
+    });
 
-  testWidgets(
-    'TodoPageAppBar should have a title '
-    'and todo status text should update on TodoState change',
-    (tester) async {
-      final todo = Todo(title: 'title');
+    // Common tests for web and mobile
+    for (var isWeb in [true, false]) {
+      final platform = isWeb ? 'web' : 'mobile';
 
-      await tester.pumpWidget(
-        BlocProvider(
-          create: (context) => todoCubit,
-          child: const MaterialApp(
-            home: TodoPageAppBar(),
-          ),
-        ),
+      testWidgets(
+        'should have title in $platform',
+        (tester) async {
+          await tester.pumpAndWrap(
+            const Scaffold(appBar: TodoPageAppBar()),
+            todoCubit: todoCubit,
+            inWeb: isWeb,
+            withScaffold: false,
+          );
+          expect(find.text('Todo'), findsOneWidget);
+        },
       );
 
-      expect(find.widgetWithText(AppBar, 'Todo'), findsOneWidget);
-      expect(find.text('0/0'), findsNothing);
+      group('TodoStatus', () {
+        // Finders
+        final statusText = find.byKey(const Key('todo-status-text-key'));
 
-      todoCubit.addTodo(todo);
-      await tester.pump();
+        testWidgets(
+          'should not render if todos is empty in $platform',
+          (tester) async {
+            await tester.pumpAndWrap(
+              const Scaffold(appBar: TodoPageAppBar()),
+              todoCubit: todoCubit,
+              inWeb: isWeb,
+              withScaffold: false,
+            );
+            expect(statusText, findsNothing);
+          },
+        );
 
-      expect(find.text('0/1'), findsOneWidget);
+        testWidgets(
+          'should render if todos is not empty in $platform',
+          (tester) async {
+            when(() => todoCubit.state).thenReturn(TodoFetched(todos: [todo]));
+            await tester.pumpAndWrap(
+              const Scaffold(appBar: TodoPageAppBar()),
+              todoCubit: todoCubit,
+              inWeb: isWeb,
+              withScaffold: false,
+            );
+            expect(statusText, findsOneWidget);
+          },
+        );
 
-      todoCubit.toggleIsDone(todo);
-      await tester.pumpAndSettle();
+        testWidgets(
+          'should correctly format on right side in $platform',
+          (tester) async {
+            when(() => todoCubit.state).thenReturn(TodoFetched(todos: [todo]));
+            await tester.pumpAndWrap(
+              const Scaffold(appBar: TodoPageAppBar()),
+              todoCubit: todoCubit,
+              inWeb: isWeb,
+              withScaffold: false,
+            );
+            expect(tester.widget<Text>(statusText).data, '0/1');
+          },
+        );
 
-      expect(find.text('1/1'), findsOneWidget);
-
-      todoCubit.toggleIsDone(todo.copyWith(isDone: true));
-      await tester.pumpAndSettle();
-
-      expect(find.text('0/1'), findsOneWidget);
-
-      todoCubit.deleteTodo(todo);
-      await tester.pumpAndSettle();
-
-      expect(find.text('0/0'), findsNothing);
-    },
-  );
+        testWidgets(
+          'should correctly format on left side in $platform',
+          (tester) async {
+            when(() => todoCubit.state).thenReturn(
+              TodoFetched(todos: [todo.copyWith(isDone: true)]),
+            );
+            await tester.pumpAndWrap(
+              const Scaffold(appBar: TodoPageAppBar()),
+              todoCubit: todoCubit,
+              inWeb: isWeb,
+              withScaffold: false,
+            );
+            expect(tester.widget<Text>(statusText).data, '1/1');
+          },
+        );
+      });
+    }
+  });
 }
