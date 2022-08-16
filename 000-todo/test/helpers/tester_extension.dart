@@ -5,7 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:todo/cubit/todo_cubit.dart';
 import 'package:todo/utils/test_helper.dart';
 
-import '../mocks/mock_app_service.dart';
+import '../mocks/mocks.dart';
 
 extension TesterExtension on WidgetTester {
   /// Wrap given `widget` with [TestHelper], [MaterialApp] and [Scaffold].

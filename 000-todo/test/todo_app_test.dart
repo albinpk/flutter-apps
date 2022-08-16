@@ -4,14 +4,14 @@ import 'package:mocktail/mocktail.dart';
 import 'package:todo/pages/pages.dart';
 import 'package:todo/todo_app.dart';
 
-class _MockLocalStorage extends Mock implements LocalStorage {}
+import 'mocks/mocks.dart';
 
 void main() {
   group('TodoApp', () {
     late LocalStorage localStorage;
 
     setUp(() {
-      localStorage = _MockLocalStorage();
+      localStorage = MockLocalStorage();
     });
 
     testWidgets(
