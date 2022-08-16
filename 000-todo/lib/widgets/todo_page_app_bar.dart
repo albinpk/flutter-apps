@@ -49,6 +49,7 @@ class _TodoStatus extends StatelessWidget {
 
         return Text(
           '${state.doneCount}/${state.todos.length}',
+          key: const Key('todo-status-text-key'),
           style: Theme.of(context)
               .textTheme
               .titleMedium
