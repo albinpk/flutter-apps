@@ -4,7 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:todo/models/models.dart';
 import 'package:todo/repositories/repositories.dart';
 
-class _MockLocalStorage extends Mock implements LocalStorage {}
+import '../mocks/mocks.dart';
 
 void main() {
   group('LocalStorageTodoRepository', () {
@@ -13,7 +13,7 @@ void main() {
     final todo = Todo(title: 'T', description: 'D');
 
     setUp(() {
-      localStorage = _MockLocalStorage();
+      localStorage = MockLocalStorage();
       repository = LocalStorageTodoRepository(localStorage);
       when(() => localStorage.setItem(any(), any())).thenAnswer((_) async {});
     });

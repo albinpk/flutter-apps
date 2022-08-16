@@ -6,7 +6,7 @@ import 'package:todo/models/models.dart';
 import 'package:todo/widgets/widgets.dart';
 
 import '../helpers/tester_extension.dart';
-import '../mocks/mock_todo_cubit.dart';
+import '../mocks/mocks.dart';
 
 void main() {
   group('TodoPageAppBar', () {
