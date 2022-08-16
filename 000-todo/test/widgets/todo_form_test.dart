@@ -1,183 +1,186 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:todo/cubit/todo_cubit.dart';
 import 'package:todo/models/models.dart';
 import 'package:todo/widgets/widgets.dart';
 
+import '../helpers/tester_extension.dart';
 import '../mocks/fake_todo.dart';
 import '../mocks/mock_todo_cubit.dart';
 
 void main() {
-  setUpAll(() {
-    registerFallbackValue(FakeTodo());
-  });
+  group('TodoForm', () {
+    setUpAll(() {
+      registerFallbackValue(FakeTodo());
+    });
 
-  late TodoCubit todoCubit;
+    late TodoCubit todoCubit;
 
-  setUp(() {
-    todoCubit = MockTodoCubit();
-  });
+    setUp(() {
+      todoCubit = MockTodoCubit();
+    });
 
-  testWidgets(
-    'TodoForm should have a title, Form, 2 TextFormField '
-    'and Cancel & Save buttons. '
-    'And it should show error text on form validation '
-    'and should call TodoCubit.addTodo() on save',
-    (tester) async {
-      await tester.pumpWidget(
-        BlocProvider<TodoCubit>(
-          create: (context) => todoCubit,
-          child: const MaterialApp(
-            home: Scaffold(body: TodoForm()),
-          ),
-        ),
-      );
+    // Finders
+    final formTitle = find.byKey(const Key('todo-form-title-text'));
+    final titleFormField = find.widgetWithText(TextFormField, 'Title');
+    final descriptionFormField = find.widgetWithText(
+      TextFormField,
+      'Description',
+    );
+    final cancelButton = find.widgetWithText(TextButton, 'Cancel');
+    final saveButton = find.widgetWithText(ElevatedButton, 'Save');
 
-      final titleFormField = find.widgetWithText(TextFormField, 'Title');
-      final descriptionFormField = find.widgetWithText(
-        TextFormField,
-        'Description',
-      );
-      final titleFormFieldErrorText = find.text('Please enter todo title');
-      final cancelButton = find.widgetWithText(TextButton, 'Cancel');
-      final saveButton = find.widgetWithText(ElevatedButton, 'Save');
+    for (final isWeb in [true, false]) {
+      group('(${isWeb ? 'web' : 'mobile'})', () {
+        testWidgets(
+          'should have a form, title, two text form fields '
+          'and cancel/save buttons',
+          (tester) async {
+            await tester.pumpAndWrap(const TodoForm(), inWeb: isWeb);
+            expect(find.byType(Form), findsOneWidget);
+            expect(formTitle, findsOneWidget);
+            expect(tester.widget<Text>(formTitle).data, 'New Todo');
+            expect(titleFormField, findsOneWidget);
+            expect(descriptionFormField, findsOneWidget);
+            expect(cancelButton, findsOneWidget);
+            expect(saveButton, findsOneWidget);
+          },
+        );
 
-      expect(find.byType(Form), findsOneWidget);
-      expect(find.text('New Todo'), findsOneWidget);
-      expect(titleFormField, findsOneWidget);
-      expect(descriptionFormField, findsOneWidget);
-      expect(tester.widget<TextFormField>(titleFormField).initialValue, '');
-      expect(
-        tester.widget<TextFormField>(descriptionFormField).initialValue,
-        '',
-      );
-      expect(titleFormFieldErrorText, findsNothing);
-      expect(cancelButton, findsOneWidget);
-      expect(saveButton, findsOneWidget);
+        testWidgets(
+          'should close dialog when cancel button pressed',
+          (tester) async {
+            await tester.pumpAndWrap(const TodoForm(), inWeb: isWeb);
+            await tester.tap(cancelButton);
+            await tester.pumpAndSettle();
+            expect(find.byType(TodoForm), findsNothing);
+          },
+        );
 
-      await tester.tap(saveButton);
-      await tester.pump();
+        testWidgets(
+          'should validate & format inputs and call TodoCubit.addTodo on save',
+          (tester) async {
+            await tester.pumpAndWrap(
+              const TodoForm(),
+              todoCubit: todoCubit,
+              inWeb: isWeb,
+            );
+            final titleErrorText = find.text('Please enter todo title');
 
-      verifyNever(() => todoCubit.addTodo(any()));
-      expect(titleFormFieldErrorText, findsOneWidget);
+            // With no input
+            await tester.tap(saveButton);
+            await tester.pump();
+            expect(titleErrorText, findsOneWidget);
 
-      await tester.enterText(titleFormField, '    ');
-      await tester.tap(saveButton);
-      await tester.pump();
+            // With description only
+            await tester.enterText(descriptionFormField, '  \n D  ');
+            await tester.tap(saveButton);
+            await tester.pump();
+            expect(titleErrorText, findsOneWidget);
+            verifyNever(() => todoCubit.addTodo(any()));
 
-      verifyNever(() => todoCubit.addTodo(any()));
-      expect(titleFormFieldErrorText, findsOneWidget);
-
-      // TodoForm should trim the title on save
-      await tester.enterText(titleFormField, '    title1     ');
-      await tester.tap(saveButton);
-      await tester.pump();
-
-      verify(
-        () => todoCubit.addTodo(
-          any(
-            that: isA<Todo>()
-                .having(
-                  (todo) => todo.title,
-                  'title',
-                  'title1',
-                )
-                .having(
-                  (todo) => todo.description,
-                  'description',
-                  '',
+            // With title
+            await tester.enterText(titleFormField, '  \n T\n ');
+            await tester.tap(saveButton);
+            await tester.pump();
+            expect(titleErrorText, findsNothing);
+            verify(
+              () => todoCubit.addTodo(
+                any(
+                  that: isA<Todo>()
+                      .having((t) => t.title, 'title', 'T')
+                      .having((t) => t.description, 'description', 'D'),
                 ),
-          ),
-        ),
-      ).called(1);
-      verifyNever(() => todoCubit.updateTodo(any()));
-      expect(titleFormFieldErrorText, findsNothing);
-    },
-  );
+              ),
+            ).called(1);
 
-  testWidgets(
-    'with description',
-    (tester) async {
-      await tester.pumpWidget(
-        BlocProvider<TodoCubit>(
-          create: (context) => todoCubit,
-          child: const MaterialApp(
-            home: Scaffold(body: TodoForm()),
-          ),
-        ),
-      );
+            // Should close the form dialog
+            await tester.pumpAndSettle();
+            expect(find.byType(TodoForm), findsNothing);
 
-      final titleFormField = find.widgetWithText(TextFormField, 'Title');
-      final descriptionFormField = find.widgetWithText(
-        TextFormField,
-        'Description',
-      );
-      final saveButton = find.widgetWithText(ElevatedButton, 'Save');
+            verifyNever(() => todoCubit.updateTodo(any()));
+          },
+        );
 
-      await tester.enterText(titleFormField, 'title1');
-      // TodoForm should trim the description on save
-      await tester.enterText(descriptionFormField, '  description  ');
-      await tester.tap(saveButton);
-      await tester.pump();
+        group('with [todo]', () {
+          final todo = Todo(title: 'T', description: 'D');
 
-      verify(
-        () => todoCubit.addTodo(
-          any(
-            that: isA<Todo>()
-                .having(
-                  (todo) => todo.title,
-                  'title',
-                  'title1',
-                )
-                .having(
-                  (todo) => todo.description,
-                  'description',
-                  'description',
-                ),
-          ),
-        ),
-      ).called(1);
-      verifyNever(() => todoCubit.updateTodo(any()));
-    },
-  );
+          testWidgets(
+            'should have "Edit Todo" title',
+            (tester) async {
+              await tester.pumpAndWrap(TodoForm(todo: todo), inWeb: isWeb);
+              expect(tester.widget<Text>(formTitle).data, 'Edit Todo');
+            },
+          );
 
-  testWidgets(
-    'TodoForm having [todo] argument should call updateTodo() on save',
-    (tester) async {
-      final todo = Todo(title: 'title1', description: 'description');
+          testWidgets(
+            'should have initial values in form fields',
+            (tester) async {
+              await tester.pumpAndWrap(
+                TodoForm(todo: todo),
+                inWeb: isWeb,
+              );
+              expect(
+                tester.widget<TextFormField>(titleFormField).initialValue,
+                todo.title,
+              );
+              expect(
+                tester.widget<TextFormField>(descriptionFormField).initialValue,
+                todo.description,
+              );
+            },
+          );
 
-      await tester.pumpWidget(
-        BlocProvider<TodoCubit>(
-          create: (context) => todoCubit,
-          child: MaterialApp(
-            home: Scaffold(body: TodoForm(todo: todo)),
-          ),
-        ),
-      );
+          // TODO
+          testWidgets(
+            'should close form dialog when save button '
+            'pressed without any change',
+            (tester) async {
+              await tester.pumpAndWrap(
+                TodoForm(todo: todo),
+                //todoCubit: todoCubit,
+                inWeb: isWeb,
+              );
+              await tester.tap(saveButton);
+              await tester.pumpAndSettle();
 
-      final titleFormField = find.widgetWithText(TextFormField, 'Title');
-      final descriptionFormField = find.widgetWithText(
-        TextFormField,
-        'Description',
-      );
-      final saveButton = find.widgetWithText(ElevatedButton, 'Save');
+              verifyNever(() => todoCubit.updateTodo(any()));
+              verifyNever(() => todoCubit.addTodo(any()));
+              expect(find.byType(TodoForm), findsNothing);
+            },
+            skip: true,
+          );
 
-      expect(find.text('Edit Todo'), findsOneWidget);
-      expect(
-        tester.widget<TextFormField>(titleFormField).initialValue,
-        todo.title,
-      );
-      expect(
-        tester.widget<TextFormField>(descriptionFormField).initialValue,
-        todo.description,
-      );
+          testWidgets(
+            'should call TodoCubit.updateTodo on save',
+            (tester) async {
+              await tester.pumpAndWrap(
+                TodoForm(todo: todo),
+                todoCubit: todoCubit,
+                inWeb: isWeb,
+              );
+              await tester.enterText(titleFormField, 'T2');
+              await tester.enterText(descriptionFormField, 'D2');
+              await tester.tap(saveButton);
+              await tester.pumpAndSettle();
 
-      await tester.tap(saveButton);
+              verify(
+                () => todoCubit.updateTodo(todo.copyWith(
+                  title: 'T2',
+                  description: 'D2',
+                )),
+              ).called(1);
 
-      verify(() => todoCubit.updateTodo(todo)).called(1);
-      verifyNever(() => todoCubit.addTodo(any()));
-    },
-  );
+              // Should close the form dialog
+              await tester.pumpAndSettle();
+              expect(find.byType(TodoForm), findsNothing);
+
+              verifyNever(() => todoCubit.addTodo(any()));
+            },
+          );
+        });
+      });
+    }
+  });
 }
