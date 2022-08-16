@@ -2,30 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:todo/widgets/widgets.dart';
 
+import '../helpers/tester_extension.dart';
+
 void main() {
-  testWidgets(
-    'TodoPageFab should have a FloatingActionButton '
-    'with tooltip and should open TodoForm on tap',
-    (tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(home: TodoPageFab()),
+  group('TodoPageFab', () {
+    // Finders
+    final fabWithIcon = find.widgetWithIcon(FloatingActionButton, Icons.add);
+
+    // Common tests for web and mobile
+    for (var isWeb in [true, false]) {
+      final platform = isWeb ? 'web' : 'mobile';
+
+      testWidgets(
+        'should have add icon and tooltip in $platform',
+        (tester) async {
+          await tester.pumpAndWrap(
+            const Scaffold(floatingActionButton: TodoPageFab()),
+            withScaffold: false,
+            inWeb: isWeb,
+          );
+          expect(fabWithIcon, findsOneWidget);
+          expect(
+            tester.widget<FloatingActionButton>(fabWithIcon).tooltip,
+            'Add Todo',
+          );
+        },
       );
 
-      final fab = find.widgetWithIcon(FloatingActionButton, Icons.add);
-      expect(fab, findsOneWidget);
-      expect(tester.widget<FloatingActionButton>(fab).tooltip, 'Add Todo');
-
-      await tester.tap(fab);
-      await tester.pump();
-
-      expect(find.byType(Dialog), findsOneWidget);
-      expect(find.byType(TodoForm), findsOneWidget);
-
-      await tester.tap(find.widgetWithText(TextButton, 'Cancel'));
-      await tester.pump();
-
-      expect(find.byType(TodoForm), findsNothing);
-      expect(fab, findsOneWidget);
-    },
-  );
+      testWidgets(
+        'should open TodoForm dialog when pressed in $platform',
+        (tester) async {
+          await tester.pumpAndWrap(
+            const Scaffold(floatingActionButton: TodoPageFab()),
+            withScaffold: false,
+            inWeb: isWeb,
+          );
+          await tester.tap(fabWithIcon);
+          await tester.pump();
+          expect(find.byType(Dialog), findsOneWidget);
+          expect(find.byType(TodoForm), findsOneWidget);
+        },
+      );
+    }
+  });
 }
