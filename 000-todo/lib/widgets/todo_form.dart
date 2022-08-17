@@ -75,10 +75,11 @@ class _TodoFormState extends State<TodoForm> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: const Text('Cancel'),
-                      ),
+                      if (Navigator.of(context).canPop())
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text('Cancel'),
+                        ),
                       const SizedBox(width: 10),
                       ElevatedButton(
                         onPressed: _onSave,
@@ -115,6 +116,10 @@ class _TodoFormState extends State<TodoForm> {
           );
     }
 
-    Navigator.of(context).pop();
+    if (Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+    } else {
+      _formKey.currentState!.reset();
+    }
   }
 }
