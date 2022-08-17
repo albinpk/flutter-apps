@@ -26,11 +26,6 @@ class TodoView extends StatelessWidget {
     return BlocConsumer<TodoCubit, TodoState>(
       listener: (context, state) {
         if (state is TodoDeleted) {
-          String todoTitle = state.deletedTodo.title;
-          if (todoTitle.length > 15) {
-            todoTitle = todoTitle.replaceRange(15, null, '...');
-          }
-
           final isWeb = context.read<TestHelper>().isWeb;
 
           ScaffoldMessenger.of(context)
@@ -45,6 +40,8 @@ class TodoView extends StatelessWidget {
                         : null
                     : null,
                 content: RichText(
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   text: TextSpan(
                     style: TextStyle(
                       color: Theme.of(context).brightness == Brightness.dark
@@ -52,12 +49,11 @@ class TodoView extends StatelessWidget {
                           : Colors.white,
                     ),
                     children: [
-                      const TextSpan(text: 'Todo '),
+                      const TextSpan(text: 'Deleting: '),
                       TextSpan(
-                        text: '"$todoTitle"',
+                        text: state.deletedTodo.title,
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      const TextSpan(text: ' deleted!')
                     ],
                   ),
                 ),
