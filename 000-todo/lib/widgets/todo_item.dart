@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo/utils/test_helper.dart';
 
 import '../cubit/todo_cubit.dart';
 import '../models/models.dart';
+import '../utils/extensions/target_platform_extension.dart';
 import 'todo_form.dart';
 
 class TodoItem extends StatelessWidget {
@@ -16,10 +16,22 @@ class TodoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (context.select<TestHelper, bool>((s) => s.isWeb)) {
-      return _TodoTile(todo: todo);
-    }
+    return (Theme.of(context).platform.isMobile)
+        ? _MobileTile(todo: todo)
+        : _DesktopTile(todo: todo);
+  }
+}
 
+class _MobileTile extends StatelessWidget {
+  final Todo todo;
+
+  const _MobileTile({
+    Key? key,
+    required this.todo,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Dismissible(
       key: ValueKey(todo),
       direction: DismissDirection.endToStart,
@@ -36,66 +48,94 @@ class TodoItem extends StatelessWidget {
           ),
         ),
       ),
-      child: _TodoTile(todo: todo),
+      child: CheckboxListTile(
+        value: todo.isDone,
+        title: _TodoTitle(todo: todo),
+        subtitle: todo.description.isNotEmpty ? Text(todo.description) : null,
+        controlAffinity: ListTileControlAffinity.leading,
+        onChanged: (_) {
+          context.read<TodoCubit>().toggleIsDone(todo);
+        },
+        secondary: _EditButton(todo: todo),
+      ),
     );
   }
 }
 
-class _TodoTile extends StatelessWidget {
+class _DesktopTile extends StatelessWidget {
   final Todo todo;
 
-  const _TodoTile({
+  const _DesktopTile({
     Key? key,
     required this.todo,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final isWeb = context.select<TestHelper, bool>((s) => s.isWeb);
-
-    final style = Theme.of(context).textTheme.titleMedium?.copyWith(
-          decoration: todo.isDone ? TextDecoration.lineThrough : null,
-          fontWeight: todo.isDone ? null : FontWeight.w500,
-        );
-    return Center(
-      child: SizedBox(
-        width: isWeb ? 600 : null,
-        child: CheckboxListTile(
-          value: todo.isDone,
-          title: Text(todo.title, style: style),
-          subtitle: todo.description.isNotEmpty ? Text(todo.description) : null,
-          controlAffinity: ListTileControlAffinity.leading,
-          onChanged: (_) {
-            context.read<TodoCubit>().toggleIsDone(todo);
-          },
-          secondary: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                tooltip: 'Edit',
-                onPressed: () => _onEditTap(context),
-                icon: const Icon(Icons.edit),
-              ),
-              if (isWeb)
-                IconButton(
-                  tooltip: 'Delete',
-                  onPressed: () => context.read<TodoCubit>().deleteTodo(todo),
-                  icon: const Icon(Icons.delete),
-                ),
-            ],
+    return ListTile(
+      title: _TodoTitle(todo: todo),
+      leading: Checkbox(
+        value: todo.isDone,
+        onChanged: (value) {
+          context.read<TodoCubit>().toggleIsDone(todo);
+        },
+      ),
+      subtitle: todo.description.isNotEmpty ? Text(todo.description) : null,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _EditButton(todo: todo),
+          IconButton(
+            tooltip: 'Delete',
+            onPressed: () => context.read<TodoCubit>().deleteTodo(todo),
+            icon: const Icon(Icons.delete),
           ),
-        ),
+        ],
       ),
     );
   }
+}
 
-  void _onEditTap(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => Dialog(
-        child: TodoForm(todo: todo),
+class _EditButton extends StatelessWidget {
+  const _EditButton({
+    Key? key,
+    required this.todo,
+  }) : super(key: key);
+
+  final Todo todo;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      tooltip: 'Edit',
+      onPressed: () => showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => Dialog(
+          child: TodoForm(todo: todo),
+        ),
       ),
+      icon: const Icon(Icons.edit),
+    );
+  }
+}
+
+class _TodoTitle extends StatelessWidget {
+  const _TodoTitle({
+    Key? key,
+    required this.todo,
+  }) : super(key: key);
+
+  final Todo todo;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      todo.title,
+      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            decoration: todo.isDone ? TextDecoration.lineThrough : null,
+            fontWeight: todo.isDone ? null : FontWeight.w500,
+          ),
     );
   }
 }
