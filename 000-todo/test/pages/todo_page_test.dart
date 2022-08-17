@@ -110,7 +110,7 @@ void main() {
               await tester.pumpAndSettle();
               expect(find.byType(SnackBar), findsOneWidget);
               expect(
-                find.text('Todo "${todo.title}" deleted!', findRichText: true),
+                find.text('Deleting: ${todo.title}', findRichText: true),
                 findsOneWidget,
               );
               await tester.tap(find.text('Undo'));
