@@ -80,13 +80,25 @@ class TodoView extends StatelessWidget {
           );
         }
 
-        return ListView.builder(
-          itemCount: state.todos.length + 1,
-          itemBuilder: (context, i) {
-            if (i == state.todos.length) return const SizedBox(height: 80);
+        return Row(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: state.todos.length + 1,
+                itemBuilder: (context, i) {
+                  // Adding extra height at the end,
+                  // for spacing between last item and FAB
+                  if (i == state.todos.length) {
+                    return const SizedBox(height: 80);
+                  }
 
-            return TodoItem(todo: state.todos[i]);
-          },
+                  return TodoItem(todo: state.todos[i]);
+                },
+              ),
+            ),
+            if (MediaQuery.of(context).size.width > 800)
+              const Expanded(child: TodoForm()),
+          ],
         );
       },
     );
