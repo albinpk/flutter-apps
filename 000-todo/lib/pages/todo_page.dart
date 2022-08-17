@@ -84,6 +84,7 @@ class TodoView extends StatelessWidget {
           children: [
             Expanded(
               child: ListView.builder(
+                controller: ScrollController(),
                 itemCount: state.todos.length + 1,
                 itemBuilder: (context, i) {
                   // Adding extra height at the end,

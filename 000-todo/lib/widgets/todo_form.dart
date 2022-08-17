@@ -30,6 +30,7 @@ class _TodoFormState extends State<TodoForm> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: SingleChildScrollView(
+            controller: ScrollController(),
             physics: const BouncingScrollPhysics(),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
