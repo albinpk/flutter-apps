@@ -26,7 +26,7 @@ class _TodoFormState extends State<TodoForm> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 600,
+      width: 500,
       child: Form(
         key: _formKey,
         child: Padding(
