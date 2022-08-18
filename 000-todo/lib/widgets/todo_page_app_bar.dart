@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../constants/break_point.dart';
 import '../cubit/todo_cubit.dart';
 
 class TodoPageAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -8,18 +9,20 @@ class TodoPageAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
     return AppBar(
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           const Text('Todo'),
-          if (MediaQuery.of(context).size.width > 600) ...const [
+          if (width > Breakpoint.w800) ...const [
             SizedBox(width: 20),
             _TodoStatus(),
           ]
         ],
       ),
-      actions: MediaQuery.of(context).size.width > 600
+      actions: width > Breakpoint.w800
           ? null
           : const [
               Center(
