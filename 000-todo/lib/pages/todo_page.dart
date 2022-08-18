@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../cubit/todo_cubit.dart';
+import '../utils/extensions/target_platform_extension.dart';
 import '../utils/test_helper.dart';
 import '../widgets/widgets.dart';
 
@@ -97,7 +98,9 @@ class TodoView extends StatelessWidget {
                 },
               ),
             ),
-            if (MediaQuery.of(context).size.width > 800)
+            if ((context.select((TestHelper h) => h.isWeb) ||
+                    Theme.of(context).platform.isDesktop) &&
+                MediaQuery.of(context).size.width > 800)
               const Expanded(child: TodoForm()),
           ],
         );
