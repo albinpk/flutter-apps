@@ -35,14 +35,16 @@ class TodoView extends StatelessWidget {
       listener: (context, state) {
         if (state is TodoDeleted) {
           final isWeb = context.read<TestHelper>().isWeb;
+          final isDesktop = Theme.of(context).platform.isDesktop;
 
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
-                behavior:
-                    isWeb ? SnackBarBehavior.floating : SnackBarBehavior.fixed,
-                width: isWeb
+                behavior: isWeb || isDesktop
+                    ? SnackBarBehavior.floating
+                    : SnackBarBehavior.fixed,
+                width: isWeb || isDesktop
                     ? MediaQuery.of(context).size.width > 600
                         ? 550
                         : null
