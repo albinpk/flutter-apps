@@ -88,6 +88,12 @@ class TodoView extends StatelessWidget {
           );
         }
 
+        final isWeb = context.select((TestHelper h) => h.isWeb);
+        final isDesktop = Theme.of(context).platform.isDesktop;
+        final width = MediaQuery.of(context).size.width;
+
+        final showForm = (isWeb || isDesktop) && width > 800;
+
         return Row(
           children: [
             Expanded(
@@ -105,10 +111,10 @@ class TodoView extends StatelessWidget {
                 },
               ),
             ),
-            if ((context.select((TestHelper h) => h.isWeb) ||
-                    Theme.of(context).platform.isDesktop) &&
-                MediaQuery.of(context).size.width > 800)
-              const Expanded(child: TodoForm()),
+            if (showForm)
+              const Expanded(
+                child: TodoForm(canPop: false),
+              ),
           ],
         );
       },
