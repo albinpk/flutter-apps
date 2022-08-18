@@ -11,7 +11,7 @@ import 'utils/test_helper.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (defaultTargetPlatform.isDesktop) {
+  if (!kIsWeb && defaultTargetPlatform.isDesktop) {
     setWindowTitle('Todo');
     setWindowMinSize(const Size(400, 450));
   }
