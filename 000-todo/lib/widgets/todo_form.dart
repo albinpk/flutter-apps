@@ -6,10 +6,12 @@ import '../models/models.dart';
 
 class TodoForm extends StatefulWidget {
   final Todo? todo;
+  final bool canPop;
 
   const TodoForm({
     super.key,
     this.todo,
+    this.canPop = true,
   });
 
   @override
@@ -75,7 +77,7 @@ class _TodoFormState extends State<TodoForm> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      if (Navigator.of(context).canPop())
+                      if (widget.canPop)
                         TextButton(
                           onPressed: () => Navigator.of(context).pop(),
                           child: const Text('Cancel'),
@@ -116,7 +118,7 @@ class _TodoFormState extends State<TodoForm> {
           );
     }
 
-    if (Navigator.of(context).canPop()) {
+    if (widget.canPop) {
       Navigator.of(context).pop();
     } else {
       _formKey.currentState!.reset();
