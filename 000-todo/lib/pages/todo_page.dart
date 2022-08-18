@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../constants/break_point.dart';
 import '../cubit/todo_cubit.dart';
 import '../utils/extensions/target_platform_extension.dart';
 import '../utils/test_helper.dart';
@@ -11,9 +12,11 @@ class TodoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool showFab = (context.select((TestHelper h) => h.isWeb) ||
-            Theme.of(context).platform.isDesktop) &&
-        MediaQuery.of(context).size.width <= 800;
+    final isWeb = context.select((TestHelper h) => h.isWeb);
+    final isMobile = Theme.of(context).platform.isMobile;
+    final width = MediaQuery.of(context).size.width;
+
+    final bool showFab = (!isWeb && isMobile) || width <= Breakpoint.w800;
 
     return Scaffold(
       appBar: const TodoPageAppBar(),
