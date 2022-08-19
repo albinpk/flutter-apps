@@ -15,8 +15,10 @@ class TodoPage extends StatelessWidget {
     final isWeb = context.select((TestHelper h) => h.isWeb);
     final isMobile = Theme.of(context).platform.isMobile;
     final width = MediaQuery.of(context).size.width;
+    final haveTodo = context.select((TodoCubit c) => c.state.todos.isNotEmpty);
 
-    final bool showFab = (!isWeb && isMobile) || width <= Breakpoint.w800;
+    final bool showFab =
+        haveTodo && ((!isWeb && isMobile) || width <= Breakpoint.w800);
 
     return Scaffold(
       appBar: const TodoPageAppBar(),
@@ -86,7 +88,7 @@ class TodoView extends StatelessWidget {
 
         if (state.todos.isEmpty) {
           return const Center(
-            child: Text('Create a todo'),
+            child: TodoForm(canPop: false),
           );
         }
 
