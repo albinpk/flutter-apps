@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -7,6 +8,7 @@ import 'package:todo/widgets/widgets.dart';
 
 import '../helpers/tester_extension.dart';
 import '../mocks/mocks.dart';
+import 'package:todo/utils/extensions/target_platform_extension.dart';
 
 void main() {
   group('TodoItem', () {
@@ -19,6 +21,8 @@ void main() {
     });
 
     // Finders
+    final checkbox = find.byType(Checkbox);
+    late final listTile = find.widgetWithText(ListTile, todo.title);
     late final checkboxListTile =
         find.widgetWithText(CheckboxListTile, todo.title);
     final editButton = find.widgetWithIcon(IconButton, Icons.edit);
@@ -27,21 +31,24 @@ void main() {
 
     // Common tests for web and mobile
     for (final isWeb in [true, false]) {
-      group('(${isWeb ? 'web' : 'mobile'})', () {
+      group(isWeb ? '(web)' : '', () {
         testWidgets(
-          'should have CheckboxListTile with Todo.title',
+          'should have Todo.title',
           (tester) async {
             await tester.pumpAndWrap(TodoItem(todo: todo), inWeb: isWeb);
-            expect(checkboxListTile, findsOneWidget);
+            expect(find.text(todo.title), findsOneWidget);
           },
+          variant: isWeb
+              ? const DefaultTestVariant()
+              : TargetPlatformVariant.all() as TestVariant,
         );
 
         testWidgets(
-          'CheckboxListTile.value is same as Todo.isDone',
+          'Checkbox.value is same as Todo.isDone',
           (tester) async {
             await tester.pumpAndWrap(TodoItem(todo: todo), inWeb: isWeb);
             expect(
-              tester.widget<CheckboxListTile>(checkboxListTile).value,
+              tester.widget<Checkbox>(checkbox).value,
               isFalse,
             );
             await tester.pumpAndWrap(
@@ -49,22 +56,28 @@ void main() {
               inWeb: isWeb,
             );
             expect(
-              tester.widget<CheckboxListTile>(checkboxListTile).value,
+              tester.widget<Checkbox>(checkbox).value,
               isTrue,
             );
           },
+          variant: isWeb
+              ? const DefaultTestVariant()
+              : TargetPlatformVariant.all() as TestVariant,
         );
 
         testWidgets(
-          'CheckboxListTile.subtitle should be null '
+          'subtitle should be null '
           'if Todo.description is empty',
           (tester) async {
             await tester.pumpAndWrap(TodoItem(todo: todo), inWeb: isWeb);
             expect(
-              tester.widget<CheckboxListTile>(checkboxListTile).subtitle,
+              tester.widget<ListTile>(listTile).subtitle,
               isNull,
             );
           },
+          variant: isWeb
+              ? const DefaultTestVariant()
+              : TargetPlatformVariant.all() as TestVariant,
         );
 
         testWidgets(
@@ -76,6 +89,9 @@ void main() {
             );
             expect(find.text('D'), findsOneWidget);
           },
+          variant: isWeb
+              ? const DefaultTestVariant()
+              : TargetPlatformVariant.all() as TestVariant,
         );
 
         testWidgets(
@@ -84,6 +100,9 @@ void main() {
             await tester.pumpAndWrap(TodoItem(todo: todo), inWeb: isWeb);
             expect(editButton, findsOneWidget);
           },
+          variant: isWeb
+              ? const DefaultTestVariant()
+              : TargetPlatformVariant.all() as TestVariant,
         );
 
         testWidgets(
@@ -94,9 +113,16 @@ void main() {
               todoCubit: todoCubit,
               inWeb: isWeb,
             );
-            await tester.tap(checkboxListTile);
+            if (!isWeb && debugDefaultTargetPlatformOverride!.isMobile) {
+              await tester.tap(checkboxListTile);
+            } else {
+              await tester.tap(checkbox);
+            }
             verify(() => todoCubit.toggleIsDone(todo)).called(1);
           },
+          variant: isWeb
+              ? const DefaultTestVariant()
+              : TargetPlatformVariant.all() as TestVariant,
         );
 
         testWidgets(
@@ -108,6 +134,9 @@ void main() {
             expect(find.byType(Dialog), findsOneWidget);
             expect(find.byType(TodoForm), findsOneWidget);
           },
+          variant: isWeb
+              ? const DefaultTestVariant()
+              : TargetPlatformVariant.all() as TestVariant,
         );
       });
     }
@@ -119,6 +148,7 @@ void main() {
           await tester.pumpAndWrap(TodoItem(todo: todo));
           expect(dismissible, findsOneWidget);
         },
+        variant: TargetPlatformVariant.mobile(),
       );
 
       testWidgets(
@@ -127,6 +157,7 @@ void main() {
           await tester.pumpAndWrap(TodoItem(todo: todo));
           expect(deleteButton, findsNothing);
         },
+        variant: TargetPlatformVariant.mobile(),
       );
 
       testWidgets(
@@ -140,38 +171,50 @@ void main() {
           await tester.pumpAndSettle();
           verify(() => todoCubit.deleteTodo(todo)).called(1);
         },
+        variant: TargetPlatformVariant.mobile(),
       );
     });
 
-    group('on web', () {
-      testWidgets(
-        'should not have Dismissible widget',
-        (tester) async {
-          await tester.pumpAndWrap(TodoItem(todo: todo), inWeb: true);
-          expect(dismissible, findsNothing);
-        },
-      );
+    group('on desktop/web', () {
+      for (var isWeb in [true, false]) {
+        testWidgets(
+          'should not have Dismissible widget',
+          (tester) async {
+            await tester.pumpAndWrap(TodoItem(todo: todo), inWeb: isWeb);
+            expect(dismissible, findsNothing);
+          },
+          variant: isWeb
+              ? const DefaultTestVariant()
+              : TargetPlatformVariant.desktop() as TestVariant,
+        );
 
-      testWidgets(
-        'should have delete button',
-        (tester) async {
-          await tester.pumpAndWrap(TodoItem(todo: todo), inWeb: true);
-          expect(deleteButton, findsOneWidget);
-        },
-      );
+        testWidgets(
+          'should have delete button',
+          (tester) async {
+            await tester.pumpAndWrap(TodoItem(todo: todo), inWeb: isWeb);
+            expect(deleteButton, findsOneWidget);
+          },
+          variant: isWeb
+              ? const DefaultTestVariant()
+              : TargetPlatformVariant.desktop() as TestVariant,
+        );
 
-      testWidgets(
-        'should call TodoCubit.deleteTodo when delete button pressed',
-        (tester) async {
-          await tester.pumpAndWrap(
-            TodoItem(todo: todo),
-            todoCubit: todoCubit,
-            inWeb: true,
-          );
-          await tester.tap(deleteButton);
-          verify(() => todoCubit.deleteTodo(todo)).called(1);
-        },
-      );
+        testWidgets(
+          'should call TodoCubit.deleteTodo when delete button pressed',
+          (tester) async {
+            await tester.pumpAndWrap(
+              TodoItem(todo: todo),
+              todoCubit: todoCubit,
+              inWeb: isWeb,
+            );
+            await tester.tap(deleteButton);
+            verify(() => todoCubit.deleteTodo(todo)).called(1);
+          },
+          variant: isWeb
+              ? const DefaultTestVariant()
+              : TargetPlatformVariant.desktop() as TestVariant,
+        );
+      }
     });
   });
 }
