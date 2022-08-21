@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubit/todo_cubit.dart';
 import '../models/models.dart';
 import '../utils/extensions/target_platform_extension.dart';
+import '../utils/test_helper.dart';
 import 'todo_form.dart';
 
 class TodoItem extends StatelessWidget {
@@ -16,7 +17,10 @@ class TodoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (Theme.of(context).platform.isMobile)
+    final isWeb = context.select((TestHelper h) => h.isWeb);
+    final isMobile = Theme.of(context).platform.isMobile;
+
+    return !isWeb && isMobile
         ? _MobileTile(todo: todo)
         : _DesktopTile(todo: todo);
   }
