@@ -53,6 +53,9 @@ void main() {
 
             // If todos is not empty
             when(() => todoCubit.state).thenReturn(TodoFetched(todos: [todo]));
+            final dpi = tester.binding.window.devicePixelRatio;
+            tester.binding.window.physicalSizeTestValue =
+                Size(800 * dpi, 800 * dpi);
             await tester.pumpAndWrap(
               const TodoPage(),
               withScaffold: false,
