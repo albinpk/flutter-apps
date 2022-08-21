@@ -109,7 +109,8 @@ class _TodoFormState extends State<TodoForm> {
               description: _description,
             ),
           );
-    } else {
+    } else if (_title != widget.todo!.title ||
+        _description != widget.todo!.description) {
       context.read<TodoCubit>().updateTodo(
             widget.todo!.copyWith(
               title: _title,
