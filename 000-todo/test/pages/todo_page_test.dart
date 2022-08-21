@@ -21,13 +21,12 @@ void main() {
 
     // Finders
     final progressIndicator = find.byType(CircularProgressIndicator);
-    final noTodosText = find.text('Create a todo');
     final listView = find.byType(ListView);
 
     for (final isWeb in [true, false]) {
       group('(${isWeb ? 'web' : 'mobile'})', () {
         testWidgets(
-          'should have TodoView, TodoPageAppBar and TodoPageFab',
+          'should have TodoView, TodoPageAppBar',
           (tester) async {
             await tester.pumpAndWrap(
               const TodoPage(),
@@ -37,6 +36,29 @@ void main() {
             );
             expect(find.byType(TodoView), findsOneWidget);
             expect(find.byType(TodoPageAppBar), findsOneWidget);
+          },
+        );
+
+        testWidgets(
+          'should have FAB if todos is not empty',
+          (tester) async {
+            // If todos is empty
+            await tester.pumpAndWrap(
+              const TodoPage(),
+              withScaffold: false,
+              todoCubit: todoCubit,
+              inWeb: isWeb,
+            );
+            expect(find.byType(TodoPageFab), findsNothing);
+
+            // If todos is not empty
+            when(() => todoCubit.state).thenReturn(TodoFetched(todos: [todo]));
+            await tester.pumpAndWrap(
+              const TodoPage(),
+              withScaffold: false,
+              todoCubit: todoCubit,
+              inWeb: isWeb,
+            );
             expect(find.byType(TodoPageFab), findsOneWidget);
           },
         );
@@ -52,13 +74,12 @@ void main() {
                 inWeb: isWeb,
               );
               expect(progressIndicator, findsOneWidget);
-              expect(noTodosText, findsNothing);
               expect(listView, findsNothing);
             },
           );
 
           testWidgets(
-            'should render info text if todos list is empty',
+            'should render TodoForm if todos list is empty',
             (tester) async {
               when(() => todoCubit.state).thenReturn(
                 const TodoFetched(todos: []),
@@ -68,7 +89,7 @@ void main() {
                 todoCubit: todoCubit,
                 inWeb: isWeb,
               );
-              expect(noTodosText, findsOneWidget);
+              expect(find.byType(TodoForm), findsOneWidget);
               expect(progressIndicator, findsNothing);
               expect(listView, findsNothing);
             },
@@ -88,7 +109,26 @@ void main() {
               expect(listView, findsOneWidget);
               expect(find.widgetWithText(TodoItem, todo.title), findsOneWidget);
               expect(progressIndicator, findsNothing);
-              expect(noTodosText, findsNothing);
+            },
+          );
+
+          testWidgets(
+            'should render ListView and TodoForm in Row if todos list is not empty',
+            (tester) async {
+              final dpi = tester.binding.window.devicePixelRatio;
+              tester.binding.window.physicalSizeTestValue =
+                  Size(801 * dpi, 800 * dpi);
+
+              when(() => todoCubit.state).thenReturn(
+                TodoFetched(todos: [todo]),
+              );
+              await tester.pumpAndWrap(
+                const TodoView(),
+                todoCubit: todoCubit,
+                inWeb: isWeb,
+              );
+              expect(listView, findsOneWidget);
+              if (isWeb) expect(find.byType(TodoForm), findsOneWidget);
             },
           );
 

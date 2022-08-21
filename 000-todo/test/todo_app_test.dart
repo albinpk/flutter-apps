@@ -4,6 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:todo/pages/pages.dart';
 import 'package:todo/todo_app.dart';
 
+import 'helpers/tester_extension.dart';
 import 'mocks/mocks.dart';
 
 void main() {
@@ -17,8 +18,10 @@ void main() {
     testWidgets(
       'should have a TodoPage and should call localstorage.getItems',
       (tester) async {
-        await tester.pumpWidget(
+        await tester.pumpAndWrap(
           TodoApp(localStorage: localStorage),
+          withMaterial: false,
+          withScaffold: false,
         );
         expect(find.byType(TodoPage), findsOneWidget);
         // localStorage.getItem() will called from getTodos() method in TodoCubit

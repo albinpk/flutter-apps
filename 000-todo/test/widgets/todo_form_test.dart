@@ -102,6 +102,26 @@ void main() {
           },
         );
 
+        testWidgets(
+          'should reset inputs if canPop is false',
+          (tester) async {
+            await tester.pumpAndWrap(
+              const TodoForm(canPop: false),
+              todoCubit: todoCubit,
+              inWeb: isWeb,
+            );
+
+            await tester.enterText(titleFormField, 'T');
+            expect(find.text('T'), findsOneWidget);
+            await tester.tap(saveButton);
+            await tester.pumpAndSettle();
+
+            // Should reset the form
+            expect(find.text('T'), findsNothing);
+            expect(find.byType(TodoForm), findsOneWidget);
+          },
+        );
+
         group('with [todo]', () {
           final todo = Todo(title: 'T', description: 'D');
 
