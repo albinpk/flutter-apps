@@ -27,89 +27,89 @@ void main() {
 
     // Common tests for web and mobile
     for (final isWeb in [true, false]) {
-      final platform = isWeb ? 'web' : 'mobile';
+      group('(${isWeb ? 'web' : 'mobile'})', () {
+        testWidgets(
+          'should have CheckboxListTile with Todo.title',
+          (tester) async {
+            await tester.pumpAndWrap(TodoItem(todo: todo), inWeb: isWeb);
+            expect(checkboxListTile, findsOneWidget);
+          },
+        );
 
-      testWidgets(
-        'should have CheckboxListTile with Todo.title in $platform',
-        (tester) async {
-          await tester.pumpAndWrap(TodoItem(todo: todo), inWeb: isWeb);
-          expect(checkboxListTile, findsOneWidget);
-        },
-      );
+        testWidgets(
+          'CheckboxListTile.value is same as Todo.isDone',
+          (tester) async {
+            await tester.pumpAndWrap(TodoItem(todo: todo), inWeb: isWeb);
+            expect(
+              tester.widget<CheckboxListTile>(checkboxListTile).value,
+              isFalse,
+            );
+            await tester.pumpAndWrap(
+              TodoItem(todo: todo.copyWith(isDone: true)),
+              inWeb: isWeb,
+            );
+            expect(
+              tester.widget<CheckboxListTile>(checkboxListTile).value,
+              isTrue,
+            );
+          },
+        );
 
-      testWidgets(
-        'CheckboxListTile.value is same as Todo.isDone in $platform',
-        (tester) async {
-          await tester.pumpAndWrap(TodoItem(todo: todo), inWeb: isWeb);
-          expect(
-            tester.widget<CheckboxListTile>(checkboxListTile).value,
-            isFalse,
-          );
-          await tester.pumpAndWrap(
-            TodoItem(todo: todo.copyWith(isDone: true)),
-            inWeb: isWeb,
-          );
-          expect(
-            tester.widget<CheckboxListTile>(checkboxListTile).value,
-            isTrue,
-          );
-        },
-      );
+        testWidgets(
+          'CheckboxListTile.subtitle should be null '
+          'if Todo.description is empty',
+          (tester) async {
+            await tester.pumpAndWrap(TodoItem(todo: todo), inWeb: isWeb);
+            expect(
+              tester.widget<CheckboxListTile>(checkboxListTile).subtitle,
+              isNull,
+            );
+          },
+        );
 
-      testWidgets(
-        'CheckboxListTile.subtitle should be null '
-        'if Todo.description is empty in $platform',
-        (tester) async {
-          await tester.pumpAndWrap(TodoItem(todo: todo), inWeb: isWeb);
-          expect(
-            tester.widget<CheckboxListTile>(checkboxListTile).subtitle,
-            isNull,
-          );
-        },
-      );
+        testWidgets(
+          'should have Todo.description',
+          (tester) async {
+            await tester.pumpAndWrap(
+              TodoItem(todo: todo.copyWith(description: 'D')),
+              inWeb: isWeb,
+            );
+            expect(find.text('D'), findsOneWidget);
+          },
+        );
 
-      testWidgets(
-        'should have Todo.description in $platform',
-        (tester) async {
-          await tester.pumpAndWrap(
-            TodoItem(todo: todo.copyWith(description: 'D')),
-            inWeb: isWeb,
-          );
-          expect(find.text('D'), findsOneWidget);
-        },
-      );
+        testWidgets(
+          'should have edit button',
+          (tester) async {
+            await tester.pumpAndWrap(TodoItem(todo: todo), inWeb: isWeb);
+            expect(editButton, findsOneWidget);
+          },
+        );
 
-      testWidgets(
-        'should have edit button in $platform',
-        (tester) async {
-          await tester.pumpAndWrap(TodoItem(todo: todo), inWeb: isWeb);
-          expect(editButton, findsOneWidget);
-        },
-      );
+        testWidgets(
+          'should call TodoCubit.toggleIsDone when pressed',
+          (tester) async {
+            await tester.pumpAndWrap(
+              TodoItem(todo: todo),
+              todoCubit: todoCubit,
+              inWeb: isWeb,
+            );
+            await tester.tap(checkboxListTile);
+            verify(() => todoCubit.toggleIsDone(todo)).called(1);
+          },
+        );
 
-      testWidgets(
-        'should call TodoCubit.toggleIsDone when pressed in $platform',
-        (tester) async {
-          await tester.pumpAndWrap(
-            TodoItem(todo: todo),
-            todoCubit: todoCubit,
-            inWeb: isWeb,
-          );
-          await tester.tap(checkboxListTile);
-          verify(() => todoCubit.toggleIsDone(todo)).called(1);
-        },
-      );
-
-      testWidgets(
-        'should open TodoForm dialog when edit button pressed in $platform',
-        (tester) async {
-          await tester.pumpAndWrap(TodoItem(todo: todo), inWeb: isWeb);
-          await tester.tap(editButton);
-          await tester.pump();
-          expect(find.byType(Dialog), findsOneWidget);
-          expect(find.byType(TodoForm), findsOneWidget);
-        },
-      );
+        testWidgets(
+          'should open TodoForm dialog when edit button pressed',
+          (tester) async {
+            await tester.pumpAndWrap(TodoItem(todo: todo), inWeb: isWeb);
+            await tester.tap(editButton);
+            await tester.pump();
+            expect(find.byType(Dialog), findsOneWidget);
+            expect(find.byType(TodoForm), findsOneWidget);
+          },
+        );
+      });
     }
 
     group('on mobile', () {
