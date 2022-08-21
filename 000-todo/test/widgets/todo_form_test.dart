@@ -158,7 +158,7 @@ void main() {
             (tester) async {
               await tester.pumpAndWrap(
                 TodoForm(todo: todo),
-                //todoCubit: todoCubit,
+                todoCubit: todoCubit,
                 inWeb: isWeb,
               );
               await tester.tap(saveButton);
@@ -168,7 +168,6 @@ void main() {
               verifyNever(() => todoCubit.addTodo(any()));
               expect(find.byType(TodoForm), findsNothing);
             },
-            skip: true,
           );
 
           testWidgets(
