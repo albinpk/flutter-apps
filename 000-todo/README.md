@@ -1,6 +1,7 @@
 # Todo
 
 [![000-todo](https://github.com/albinpk/flutter-apps/actions/workflows/000-todo.yaml/badge.svg?branch=master)](https://github.com/albinpk/flutter-apps/actions/workflows/000-todo.yaml)
+[![codecov](https://codecov.io/gh/albinpk/flutter-apps/branch/master/graph/badge.svg?token=K4XAWGNR2F)](https://codecov.io/gh/albinpk/flutter-apps)
 
 A simple todo app in flutter (work in progress).
 
