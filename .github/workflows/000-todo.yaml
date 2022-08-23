@@ -4,10 +4,12 @@ on:
   pull_request:
     paths:
       - "000-todo/**"
+      - ".github/workflows/000-todo.yaml"
       - "!000-todo/README.md"
   push:
     paths:
       - "000-todo/**"
+      - ".github/workflows/000-todo.yaml"
       - "!000-todo/README.md"
 
 jobs:
