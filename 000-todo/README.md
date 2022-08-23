@@ -1,4 +1,4 @@
-# todo
+# Todo
 
 [![000-todo](https://github.com/albinpk/flutter-apps/actions/workflows/000-todo.yaml/badge.svg?branch=master)](https://github.com/albinpk/flutter-apps/actions/workflows/000-todo.yaml)
 
@@ -13,11 +13,17 @@ A simple todo app in flutter (work in progress).
 - Dark theme support
 - Responsive UI
 
-## Supported platforms
+## Supported Platforms
 
 - Android
 - Linux
 - Web
+
+## Packages & APIs
+
+- [flutter_bloc](https://pub.dev/packages/flutter_bloc)
+- [localstorage](https://pub.dev/packages/localstorage)
+- [window_size](https://github.com/google/flutter-desktop-embedding/tree/main/plugins/window_size)
 
 ## Screenshots
 
