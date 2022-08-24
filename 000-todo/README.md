@@ -44,3 +44,9 @@ A simple todo app in flutter (work in progress).
       <img src="./images/linux/todo-home.png" alt="Todo home page" height="300" />
       <img src="./images/linux/todo-home-resize.png" alt="Todo home resized" height="300" />
   </p>
+
+- ### Web
+
+  <p>
+      <img src="./images/web/todo-home.png" alt="Todo home page" height="300" />
+  </p>
