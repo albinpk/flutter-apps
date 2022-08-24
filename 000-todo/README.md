@@ -31,6 +31,9 @@ A simple todo app in flutter (work in progress).
 - ### Android
 
   <p>
-      <img src="./images/todo-app-home-page.png" alt="Todo app home page" height="300" />
-      <img src="./images/todo-app-form.png" alt="Todo app new todo form" height="300" />
+      <img src="./images/todo-screen-record.gif" alt="Todo screen record" height="300" />
+      <img src="./images/todo-home-page.png" alt="Todo home page" height="300" />
+      <img src="./images/todo-form.png" alt="Todo form" height="300" />
+      <img src="./images/todo-swipe.png" alt="Todo swipe" height="300" />
+      <img src="./images/todo-dark-mode.png" alt="Todo dark mode" height="300" />
   </p>
