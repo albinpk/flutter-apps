@@ -1,4 +1,4 @@
-import 'package:firebase_todo/features/home/presentation/views/home_view.dart';
+import 'package:firebase_todo/features/todos/presentation/views/todos_view.dart';
 import 'package:flutter/material.dart';
 
 class FirebaseTodo extends StatelessWidget {
@@ -8,7 +8,18 @@ class FirebaseTodo extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Todo App',
-      home: HomeView(),
+      home: _HomeScreen(),
+    );
+  }
+}
+
+class _HomeScreen extends StatelessWidget {
+  const _HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: TodosView(),
     );
   }
 }
