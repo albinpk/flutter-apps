@@ -66,7 +66,12 @@ class _TodoFormState extends State<TodoForm> {
   void _onSave() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      todosRef.add(Todo(title: _title));
+      todosRef.add(
+        Todo(
+          title: _title,
+          createdAt: DateTime.now(),
+        ),
+      );
       Navigator.pop(context);
     }
   }
