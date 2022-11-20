@@ -3,7 +3,7 @@ import 'package:firebase_todo/features/todos/models/todo_model.dart';
 import 'package:firebase_todo/features/todos/presentation/views/todo_form.dart';
 import 'package:flutter/material.dart';
 
-final todosRef = FirebaseFirestore.instance
+final CollectionReference<Todo> todosRef = FirebaseFirestore.instance
     .collection('todos')
     .withConverter<Todo>(
       fromFirestore: (snapshot, options) => Todo.fromMap(snapshot.data() ?? {}),
@@ -17,7 +17,7 @@ class TodosView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder(
-        stream: todosRef.snapshots(),
+        stream: todosRef.orderBy('createdAt', descending: true).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
