@@ -12,6 +12,16 @@ Flutter Apps
 
 ## [Todo](./000-todo#readme)
 
+A simple todo app in flutter (work in progress).
+
 | Android | Linux | Web |
 | :-----: | :---: | :-: |
 |    ✔    |   ✔   |  ✔  |
+
+## [BookMyShow Tracker](./001-bookmyshow_tracker#readme)
+
+When ticket sales for a particular movie or movies on [bookmyshow.com](https://in.bookmyshow.com) begin, **BookMyShow Tracker** will let you know.
+
+| Android |
+| :-----: |
+|    ✔    |
