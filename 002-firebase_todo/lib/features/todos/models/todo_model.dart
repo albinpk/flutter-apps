@@ -7,6 +7,7 @@ class Todo {
   Todo({
     required this.title,
     required this.createdAt,
+    this.isCompleted = false,
   });
 
   /// Todo title.
@@ -15,11 +16,14 @@ class Todo {
   /// Todo created time.
   final DateTime createdAt;
 
+  /// Whether the todo is completed or not.
+  final bool isCompleted;
+
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'title': title,
-      // 'createdAt': createdAt.millisecondsSinceEpoch,
       'createdAt': Timestamp.fromDate(createdAt),
+      'isCompleted': isCompleted,
     };
   }
 
@@ -27,6 +31,7 @@ class Todo {
     return Todo(
       title: map['title'] as String,
       createdAt: (map['createdAt'] as Timestamp).toDate(),
+      isCompleted: map['isCompleted'] as bool,
     );
   }
 
