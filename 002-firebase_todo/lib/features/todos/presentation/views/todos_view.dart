@@ -37,7 +37,7 @@ class TodosView extends StatelessWidget {
           return ListView.builder(
             itemCount: docs.length,
             itemBuilder: (context, index) {
-              return TodoTile(todo: docs[index].data());
+              return TodoTile(todoDocumentSnapshot: docs[index]);
             },
           );
         },
