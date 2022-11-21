@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_todo/features/todos/models/todo_model.dart';
 import 'package:firebase_todo/features/todos/presentation/views/todo_form.dart';
+import 'package:firebase_todo/features/todos/presentation/views/todo_tile.dart';
 import 'package:flutter/material.dart';
 
 final CollectionReference<Todo> todosRef = FirebaseFirestore.instance
@@ -36,7 +37,7 @@ class TodosView extends StatelessWidget {
           return ListView.builder(
             itemCount: docs.length,
             itemBuilder: (context, index) {
-              return Text(docs[index].data().title);
+              return TodoTile(todo: docs[index].data());
             },
           );
         },
