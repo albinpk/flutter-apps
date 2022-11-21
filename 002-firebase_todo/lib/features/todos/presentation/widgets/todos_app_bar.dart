@@ -1,3 +1,4 @@
+import 'package:firebase_todo/features/todos/models/todo_model.dart';
 import 'package:firebase_todo/features/todos/presentation/views/todos_view.dart';
 import 'package:flutter/material.dart';
 
@@ -14,8 +15,10 @@ class TodosAppBar extends StatelessWidget implements PreferredSizeWidget {
         Center(
           child: Padding(
             padding: const EdgeInsets.only(right: 30),
-            child: StreamBuilder<int>(
-              stream: todosRef.snapshots().map((event) => event.docs.length),
+            child: StreamBuilder<Iterable<Todo>>(
+              stream: todosRef
+                  .snapshots()
+                  .map((event) => event.docs.map((e) => e.data())),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const SizedBox.shrink();
@@ -23,13 +26,23 @@ class TodosAppBar extends StatelessWidget implements PreferredSizeWidget {
 
                 if (snapshot.hasError) return const Text('An error');
 
-                if (!snapshot.hasData || snapshot.data! == 0) {
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return const SizedBox.shrink();
                 }
 
-                return Text(
-                  '${snapshot.data!}',
-                  style: Theme.of(context).textTheme.titleLarge,
+                return Row(
+                  children: [
+                    Text(
+                      '${snapshot.data!.where((t) => t.isCompleted).length}',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    Text(
+                      '/${snapshot.data!.length}',
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            color: Colors.white54,
+                          ),
+                    ),
+                  ],
                 );
               },
             ),
