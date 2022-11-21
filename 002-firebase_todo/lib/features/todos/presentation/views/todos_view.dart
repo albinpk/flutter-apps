@@ -35,7 +35,9 @@ class TodosView extends StatelessWidget {
           }
 
           return ListView.builder(
-            physics: const BouncingScrollPhysics(),
+            physics: const AlwaysScrollableScrollPhysics(
+              parent: BouncingScrollPhysics(),
+            ),
             padding: const EdgeInsets.all(5).copyWith(bottom: 80),
             itemCount: docs.length,
             itemBuilder: (context, index) {
