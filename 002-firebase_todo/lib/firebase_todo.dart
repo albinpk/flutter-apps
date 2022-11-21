@@ -6,9 +6,10 @@ class FirebaseTodo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      darkTheme: ThemeData.dark(),
       title: 'Todo App',
-      home: _HomeScreen(),
+      home: const _HomeScreen(),
     );
   }
 }
