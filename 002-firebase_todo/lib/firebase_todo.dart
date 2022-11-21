@@ -19,8 +19,9 @@ class _HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: TodosView(),
+    return Scaffold(
+      appBar: AppBar(title: const Text('Todos')),
+      body: const TodosView(),
     );
   }
 }
