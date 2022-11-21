@@ -19,6 +19,12 @@ class TodoTile extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         child: Row(
           children: [
+            Checkbox(
+              value: todo.isCompleted,
+              onChanged: (value) {
+                todoDocumentSnapshot.reference.update({'isCompleted': value});
+              },
+            ),
             Expanded(
               child: Text(
                 todo.title,
