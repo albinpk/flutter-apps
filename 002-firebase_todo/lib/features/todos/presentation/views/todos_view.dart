@@ -35,6 +35,8 @@ class TodosView extends StatelessWidget {
           }
 
           return ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.all(5).copyWith(bottom: 80),
             itemCount: docs.length,
             itemBuilder: (context, index) {
               return TodoTile(todoDocumentSnapshot: docs[index]);
