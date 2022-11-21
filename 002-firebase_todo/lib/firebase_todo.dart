@@ -1,4 +1,5 @@
 import 'package:firebase_todo/features/todos/presentation/views/todos_view.dart';
+import 'package:firebase_todo/features/todos/presentation/widgets/todos_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class FirebaseTodo extends StatelessWidget {
@@ -19,9 +20,9 @@ class _HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Todos')),
-      body: const TodosView(),
+    return const Scaffold(
+      appBar: TodosAppBar(),
+      body: TodosView(),
     );
   }
 }
