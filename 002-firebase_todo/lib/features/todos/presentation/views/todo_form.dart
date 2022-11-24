@@ -1,11 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+
 import 'package:firebase_todo/features/todos/models/todo_model.dart';
 import 'package:firebase_todo/features/todos/presentation/views/todos_view.dart';
-import 'package:flutter/material.dart';
 
 class TodoForm extends StatefulWidget {
   const TodoForm({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+    this.todoSnapshot,
+  });
+
+  /// To update an existing Todo.
+  final QueryDocumentSnapshot<Todo>? todoSnapshot;
 
   @override
   State<TodoForm> createState() => _TodoFormState();
@@ -32,6 +38,7 @@ class _TodoFormState extends State<TodoForm> {
             const SizedBox(height: 20),
             TextFormField(
               autofocus: true,
+              initialValue: widget.todoSnapshot?.data().title,
               decoration: const InputDecoration(
                 label: Text('Title'),
                 border: OutlineInputBorder(),
@@ -66,12 +73,16 @@ class _TodoFormState extends State<TodoForm> {
   void _onSave() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      todosRef.add(
-        Todo(
-          title: _title,
-          createdAt: DateTime.now(),
-        ),
-      );
+      if (widget.todoSnapshot != null) {
+        widget.todoSnapshot!.reference.update({'title': _title});
+      } else {
+        todosRef.add(
+          Todo(
+            title: _title,
+            createdAt: DateTime.now(),
+          ),
+        );
+      }
       Navigator.pop(context);
     }
   }

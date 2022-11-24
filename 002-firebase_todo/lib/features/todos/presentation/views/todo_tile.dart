@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_todo/features/todos/models/todo_model.dart';
+import 'package:firebase_todo/features/todos/presentation/views/todo_form.dart';
 import 'package:flutter/material.dart';
 
 class TodoTile extends StatelessWidget {
@@ -26,9 +27,28 @@ class TodoTile extends StatelessWidget {
               },
             ),
             Expanded(
-              child: Text(
-                todo.title,
-                style: Theme.of(context).textTheme.titleLarge,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(10),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Dialog(
+                        child: TodoForm(todoSnapshot: todoDocumentSnapshot),
+                      );
+                    },
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 5,
+                    vertical: 10,
+                  ),
+                  child: Text(
+                    todo.title,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ),
               ),
             ),
             IconButton(
