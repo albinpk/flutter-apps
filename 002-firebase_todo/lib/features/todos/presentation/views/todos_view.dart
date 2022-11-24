@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_todo/features/todos/models/todo_model.dart';
-import 'package:firebase_todo/features/todos/presentation/views/todo_form.dart';
 import 'package:firebase_todo/features/todos/presentation/views/todo_tile.dart';
 import 'package:flutter/material.dart';
 
@@ -16,49 +15,34 @@ class TodosView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: StreamBuilder(
-        stream: todosRef.orderBy('createdAt', descending: true).snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    return StreamBuilder(
+      stream: todosRef.orderBy('createdAt', descending: true).snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
 
-          final docs = snapshot.data!.docs;
+        final docs = snapshot.data!.docs;
 
-          if (docs.isEmpty) {
-            return const Center(child: Text('No todos found!'));
-          }
+        if (docs.isEmpty) {
+          return const Center(child: Text('No todos found!'));
+        }
 
-          return ListView.builder(
-            physics: const AlwaysScrollableScrollPhysics(
-              parent: BouncingScrollPhysics(),
-            ),
-            padding: const EdgeInsets.all(5).copyWith(bottom: 80),
-            itemCount: docs.length,
-            itemBuilder: (context, index) {
-              return TodoTile(todoDocumentSnapshot: docs[index]);
-            },
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return const Dialog(
-                child: TodoForm(),
-              );
-            },
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
+        return ListView.builder(
+          physics: const AlwaysScrollableScrollPhysics(
+            parent: BouncingScrollPhysics(),
+          ),
+          padding: const EdgeInsets.all(5).copyWith(bottom: 80),
+          itemCount: docs.length,
+          itemBuilder: (context, index) {
+            return TodoTile(todoDocumentSnapshot: docs[index]);
+          },
+        );
+      },
     );
   }
 }

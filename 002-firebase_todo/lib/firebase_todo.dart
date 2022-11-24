@@ -1,3 +1,4 @@
+import 'package:firebase_todo/features/todos/presentation/views/todo_form.dart';
 import 'package:firebase_todo/features/todos/presentation/views/todos_view.dart';
 import 'package:firebase_todo/features/todos/presentation/widgets/todos_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +21,22 @@ class _HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: TodosAppBar(),
-      body: TodosView(),
+    return Scaffold(
+      appBar: const TodosAppBar(),
+      body: const TodosView(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return const Dialog(
+                child: TodoForm(),
+              );
+            },
+          );
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
