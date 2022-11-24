@@ -39,7 +39,10 @@ class TodosView extends StatelessWidget {
           padding: const EdgeInsets.all(5).copyWith(bottom: 80),
           itemCount: docs.length,
           itemBuilder: (context, index) {
-            return TodoTile(todoDocumentSnapshot: docs[index]);
+            return TodoTile(
+              key: ObjectKey(docs[index]),
+              todoDocumentSnapshot: docs[index],
+            );
           },
         );
       },
