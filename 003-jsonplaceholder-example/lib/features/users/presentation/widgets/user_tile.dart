@@ -28,7 +28,7 @@ class UserTile extends StatelessWidget {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) {
-              return UserScreen(user: user);
+              return UserScreen(userId: user.id);
             },
           ),
         );
