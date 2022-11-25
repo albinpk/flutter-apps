@@ -17,10 +17,10 @@ class UserTile extends StatelessWidget {
       title: Text(user.name),
       subtitle: Row(
         children: [
-          const Icon(Icons.location_on, size: 16),
+          const Icon(Icons.location_on, size: 16, color: Colors.grey),
           Text(
             '${user.address.street}, ${user.address.city}',
-            style: Theme.of(context).textTheme.bodySmall,
+            style: const TextStyle(color: Colors.grey),
           ),
         ],
       ),

@@ -14,6 +14,7 @@ class PostTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      minVerticalPadding: 10,
       title: Text(
         post.title,
         overflow: TextOverflow.ellipsis,
@@ -22,6 +23,7 @@ class PostTile extends StatelessWidget {
         post.body,
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
+        style: const TextStyle(color: Colors.grey),
       ),
       onTap: () {
         Navigator.of(context).push(
