@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 
 import '../../../users/models/user_model.dart';
+import '../../../users/presentation/screens/user_screen.dart';
 import '../../../users/repositories/user_repository.dart';
 import '../../models/post_model.dart';
+import '../../repositories/post_repository.dart';
 
-class PostScreen extends StatelessWidget {
+class PostScreen extends StatefulWidget {
   const PostScreen({
     super.key,
-    required this.post,
+    required this.postId,
   });
 
-  final Post post;
+  final int postId;
+
+  @override
+  State<PostScreen> createState() => _PostScreenState();
+}
+
+class _PostScreenState extends State<PostScreen> {
+  late final _postFuture = PostRepository().getPostById(widget.postId);
 
   @override
   Widget build(BuildContext context) {
@@ -22,18 +31,37 @@ class PostScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              post.title,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: 10),
-            Text(post.body),
-            const SizedBox(height: 10),
-            _PostAuthor(userId: post.userId),
-          ],
+        child: FutureBuilder<Post>(
+          future: _postFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasError) {
+              return const Center(child: Text('An error!'));
+            }
+
+            if (!snapshot.hasData) {
+              return const Center(child: Text('No data found!'));
+            }
+
+            final post = snapshot.data!;
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  post.title,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const SizedBox(height: 10),
+                Text(post.body),
+                const SizedBox(height: 10),
+                _PostAuthor(userId: post.userId),
+              ],
+            );
+          },
         ),
       ),
     );
