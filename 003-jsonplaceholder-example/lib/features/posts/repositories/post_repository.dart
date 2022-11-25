@@ -21,7 +21,14 @@ class PostRepository {
     }
   }
 
-  Future<Post> getPostById() async {
-    throw UnimplementedError();
+  Future<Post> getPostById(int id) async {
+    try {
+      final res = await http.get(Uri.parse('$_base/posts/$id'));
+      final rawPost = json.decode(res.body);
+      return Post.fromMap(rawPost);
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
   }
 }
