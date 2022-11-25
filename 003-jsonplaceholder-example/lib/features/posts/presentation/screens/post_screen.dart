@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/widgets/transparent_app_bar.dart';
 import '../../../users/models/user_model.dart';
 import '../../../users/presentation/screens/user_screen.dart';
 import '../../../users/repositories/user_repository.dart';
@@ -24,11 +25,7 @@ class _PostScreenState extends State<PostScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black87,
-        elevation: 0,
-      ),
+      appBar: const TransparentAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: FutureBuilder<Post>(

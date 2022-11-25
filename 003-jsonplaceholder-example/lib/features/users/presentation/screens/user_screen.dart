@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/widgets/transparent_app_bar.dart';
 import '../../../posts/models/post_model.dart';
 import '../../../posts/presentation/widgets/post_tile.dart';
 import '../../../posts/repositories/post_repository.dart';
@@ -24,11 +25,7 @@ class _UserScreenState extends State<UserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        foregroundColor: Colors.black87,
-      ),
+      appBar: const TransparentAppBar(),
       body: FutureBuilder<User>(
         future: _userFuture,
         builder: (context, snapshot) {
