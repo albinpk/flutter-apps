@@ -22,6 +22,13 @@ class UserRepository {
   }
 
   Future<User> getUserById(int id) async {
-    throw UnimplementedError();
+    try {
+      final res = await http.get(Uri.parse('$_base/users/$id'));
+      final rawUser = json.decode(res.body);
+      return User.fromMap(rawUser);
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
   }
 }
