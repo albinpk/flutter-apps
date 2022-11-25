@@ -96,7 +96,24 @@ class _PostAuthorState extends State<_PostAuthor> {
 
         if (!snapshot.hasData) return const Text('No user found!');
 
-        return Text(snapshot.data!.name);
+        final user = snapshot.data!;
+
+        return TextButton.icon(
+          icon: const Icon(Icons.person),
+          label: Text(user.name),
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.blueAccent,
+          ),
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return UserScreen(userId: user.id);
+                },
+              ),
+            );
+          },
+        );
       },
     );
   }
