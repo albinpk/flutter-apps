@@ -64,6 +64,9 @@ class Address {
   final String city;
   final String zipcode;
 
+  /// Street, City
+  String toStringShort() => '$street, $city';
+
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'street': street,
