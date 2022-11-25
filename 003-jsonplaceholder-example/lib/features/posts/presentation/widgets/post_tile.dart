@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../models/post_model.dart';
+import '../screens/post_screen.dart';
 
 class PostTile extends StatelessWidget {
   const PostTile({
@@ -22,6 +23,15 @@ class PostTile extends StatelessWidget {
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
       ),
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) {
+              return PostScreen(post: post);
+            },
+          ),
+        );
+      },
     );
   }
 }
