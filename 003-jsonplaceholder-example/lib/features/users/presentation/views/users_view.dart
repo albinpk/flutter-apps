@@ -4,13 +4,20 @@ import '../../models/user_model.dart';
 import '../../repositories/user_repository.dart';
 import '../widgets/user_tile.dart';
 
-class UsersView extends StatelessWidget {
+class UsersView extends StatefulWidget {
   const UsersView({super.key});
+
+  @override
+  State<UsersView> createState() => _UsersViewState();
+}
+
+class _UsersViewState extends State<UsersView> {
+  final Future<List<User>> _usersFuture = UserRepository().getAllUsers();
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<User>>(
-      future: UserRepository().getAllUsers(),
+      future: _usersFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
