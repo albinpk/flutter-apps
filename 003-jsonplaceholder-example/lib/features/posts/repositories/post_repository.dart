@@ -21,11 +21,24 @@ class PostRepository {
     }
   }
 
+  /// Fetch post by id.
   Future<Post> getPostById(int id) async {
     try {
       final res = await http.get(Uri.parse('$_base/posts/$id'));
       final rawPost = json.decode(res.body);
       return Post.fromMap(rawPost);
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
+  /// Fetch all post by userId
+  Future<List<Post>> getAllPostsByUser(int userId) async {
+    try {
+      final res = await http.get(Uri.parse('$_base/users/$userId/posts'));
+      final rawPosts = jsonDecode(res.body) as List;
+      return rawPosts.map((e) => Post.fromMap(e)).toList();
     } catch (e) {
       log(e.toString());
       rethrow;
