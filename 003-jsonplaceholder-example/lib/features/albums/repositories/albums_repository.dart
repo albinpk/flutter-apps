@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 
 import '../models/album_model.dart';
+import '../models/photo_model.dart';
 
 class AlbumRepository {
   /// Base url.
@@ -36,6 +37,17 @@ class AlbumRepository {
       final res = await http.get(Uri.parse('$_base/users/$userId/albums'));
       final rawAlbum = jsonDecode(res.body) as List;
       return rawAlbum.map((e) => Album.fromMap(e)).toList();
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<List<Photo>> getPhotosByAlbum(int albumId) async {
+    try {
+      final res = await http.get(Uri.parse('$_base/albums/$albumId/photos'));
+      final rawPhotos = jsonDecode(res.body) as List;
+      return rawPhotos.map((e) => Photo.fromMap(e)).toList();
     } catch (e) {
       log(e.toString());
       rethrow;
