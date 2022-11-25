@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/post_model.dart';
 import '../../repositories/post_repository.dart';
+import '../widgets/post_tile.dart';
 
 class PostsView extends StatefulWidget {
   const PostsView({super.key});
@@ -37,7 +38,7 @@ class _PostsViewState extends State<PostsView> {
         return ListView.builder(
           itemCount: posts.length,
           itemBuilder: (context, index) {
-            return Text(posts[index].title);
+            return PostTile(post: posts[index]);
           },
         );
       },
