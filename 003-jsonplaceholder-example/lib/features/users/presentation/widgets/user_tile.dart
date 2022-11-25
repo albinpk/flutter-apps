@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../models/user_model.dart';
+import '../screens/user_screen.dart';
 
 class UserTile extends StatelessWidget {
   const UserTile({
@@ -23,6 +24,15 @@ class UserTile extends StatelessWidget {
           ),
         ],
       ),
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) {
+              return UserScreen(user: user);
+            },
+          ),
+        );
+      },
     );
   }
 }
