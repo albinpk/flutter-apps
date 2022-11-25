@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/album_model.dart';
 import '../../repositories/albums_repository.dart';
-import '../screens/album_screen.dart';
+import '../widgets/album_tile.dart';
 
 class AlbumsView extends StatefulWidget {
   const AlbumsView({super.key});
@@ -38,18 +38,7 @@ class _AlbumsViewState extends State<AlbumsView> {
         return ListView.builder(
           itemCount: albums.length,
           itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(albums[index].title),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return AlbumScreen(albumId: albums[index].id);
-                    },
-                  ),
-                );
-              },
-            );
+            return AlbumTile(album: albums[index]);
           },
         );
       },
