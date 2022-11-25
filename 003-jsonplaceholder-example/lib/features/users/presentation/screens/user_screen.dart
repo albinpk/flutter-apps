@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/widgets/transparent_app_bar.dart';
+import '../../../albums/models/album_model.dart';
+import '../../../albums/presentation/widgets/album_tile.dart';
+import '../../../albums/repositories/albums_repository.dart';
 import '../../../posts/models/post_model.dart';
 import '../../../posts/presentation/widgets/post_tile.dart';
 import '../../../posts/repositories/post_repository.dart';
@@ -76,18 +79,18 @@ class _UserScreenContent extends StatelessWidget {
                     indicatorColor: Colors.blue,
                     tabs: [
                       Tab(text: 'Posts'),
-                      Tab(text: 'Others'),
+                      Tab(text: 'Albums'),
                     ],
                   ),
                 ),
               ),
-            )
+            ),
           ];
         },
         body: TabBarView(
           children: [
             _PostsList(userId: user.id),
-            const Center(child: Text('Others')),
+            _AlbumsList(userId: user.id),
           ],
         ),
       ),
@@ -223,6 +226,53 @@ class _PostsListState extends State<_PostsList> {
           itemCount: posts.length,
           itemBuilder: (context, index) {
             return PostTile(post: posts[index]);
+          },
+        );
+      },
+    );
+  }
+}
+
+class _AlbumsList extends StatefulWidget {
+  const _AlbumsList({
+    Key? key,
+    required this.userId,
+  }) : super(key: key);
+
+  final int userId;
+
+  @override
+  State<_AlbumsList> createState() => _AlbumsListState();
+}
+
+class _AlbumsListState extends State<_AlbumsList> {
+  late final _albumsFuture = AlbumRepository().getAllAlbumByUser(widget.userId);
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<Album>>(
+      future: _albumsFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) return const Center(child: Text('An error!'));
+
+        if (!snapshot.hasData) {
+          return const Center(child: Text('No data found!'));
+        }
+
+        final albums = snapshot.data!;
+
+        if (albums.isEmpty) {
+          return const Center(child: Text('No Albums found!'));
+        }
+
+        return ListView.builder(
+          itemCount: albums.length,
+          itemBuilder: (context, index) {
+            return AlbumTile(album: albums[index]);
           },
         );
       },
