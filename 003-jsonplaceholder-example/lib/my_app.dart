@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:jsonplaceholder_example/features/posts/presentation/views/posts_view.dart';
-import 'package:jsonplaceholder_example/features/users/presentation/views/users_view.dart';
+
+import 'features/albums/presentation/views/albums_view.dart';
+import 'features/posts/presentation/views/posts_view.dart';
+import 'features/users/presentation/views/users_view.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -31,8 +33,9 @@ class _HomeScreenState extends State<_HomeScreen> {
   static const List<Widget> _views = [
     UsersView(),
     PostsView(),
+    AlbumsView(),
   ];
-  static const _titles = ['Users', 'Posts'];
+  static const _titles = ['Users', 'Posts', 'Albums'];
 
   /// Selected index.
   int _currentIndex = 0;
@@ -55,6 +58,10 @@ class _HomeScreenState extends State<_HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.newspaper_rounded),
             label: 'Posts',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.collections),
+            label: 'Albums',
           ),
         ],
       ),
