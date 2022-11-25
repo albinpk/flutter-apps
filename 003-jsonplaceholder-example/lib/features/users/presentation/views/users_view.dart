@@ -22,16 +22,16 @@ class UsersView extends StatelessWidget {
           return const Center(child: Text('No data found!'));
         }
 
-        final data = snapshot.data!;
+        final users = snapshot.data!;
 
-        if (data.isEmpty) {
+        if (users.isEmpty) {
           return const Center(child: Text('No Users found!'));
         }
 
         return ListView.builder(
-          itemCount: data.length,
+          itemCount: users.length,
           itemBuilder: (context, index) {
-            return UserTile(user: data[index]);
+            return UserTile(user: users[index]);
           },
         );
       },
