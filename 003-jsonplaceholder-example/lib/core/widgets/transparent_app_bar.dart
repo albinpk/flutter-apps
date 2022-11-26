@@ -9,6 +9,7 @@ class TransparentAppBar extends StatelessWidget with PreferredSizeWidget {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
+      foregroundColor: Colors.grey,
     );
   }
 
