@@ -4,6 +4,7 @@ import '../../../../core/widgets/transparent_app_bar.dart';
 import '../../../users/models/user_model.dart';
 import '../../../users/presentation/screens/user_screen.dart';
 import '../../../users/repositories/user_repository.dart';
+import '../../models/comment_model.dart';
 import '../../models/post_model.dart';
 import '../../repositories/post_repository.dart';
 
@@ -48,19 +49,117 @@ class _PostScreenState extends State<PostScreen> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  post.title,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 10),
-                Text(post.body),
-                const SizedBox(height: 10),
                 _PostAuthor(userId: post.userId),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    post.title,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(post.body),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Comments',
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                  ),
+                ),
+                Expanded(
+                  child: _PostComments(postId: post.id),
+                )
               ],
             );
           },
         ),
       ),
+    );
+  }
+}
+
+class _PostComments extends StatefulWidget {
+  const _PostComments({
+    Key? key,
+    required this.postId,
+  }) : super(key: key);
+
+  final int postId;
+
+  @override
+  State<_PostComments> createState() => _PostCommentsState();
+}
+
+class _PostCommentsState extends State<_PostComments> {
+  late final _commentsFuture =
+      PostRepository().getAllCommentsOfPost(widget.postId);
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<Comment>>(
+      future: _commentsFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) {
+          return const Center(child: Text('An error!'));
+        }
+
+        if (!snapshot.hasData) {
+          return const Center(child: Text('No data found!'));
+        }
+
+        final comments = snapshot.data!;
+
+        if (comments.isEmpty) {
+          return const Center(child: Text('No Comments found!'));
+        }
+
+        return ListView.separated(
+          physics: const BouncingScrollPhysics(),
+          separatorBuilder: (context, index) {
+            return const Divider(color: Colors.grey);
+          },
+          itemCount: comments.length,
+          itemBuilder: (context, index) {
+            return _CommentTile(comment: comments[index]);
+          },
+        );
+      },
+    );
+  }
+}
+
+class _CommentTile extends StatelessWidget {
+  const _CommentTile({
+    Key? key,
+    required this.comment,
+  }) : super(key: key);
+
+  final Comment comment;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            comment.email,
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: Colors.blue,
+                ),
+          ),
+          Text(comment.name),
+        ],
+      ),
+      subtitle: Text(comment.body),
     );
   }
 }
