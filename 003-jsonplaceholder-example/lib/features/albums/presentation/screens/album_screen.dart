@@ -100,9 +100,8 @@ class _AlbumContentState extends State<_AlbumContent> {
                   borderRadius: BorderRadius.circular(5),
                   child: GridView.builder(
                     physics: const BouncingScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: _getCrossAxisCount(),
                       crossAxisSpacing: 5,
                       mainAxisSpacing: 5,
                     ),
@@ -119,6 +118,15 @@ class _AlbumContentState extends State<_AlbumContent> {
         ],
       ),
     );
+  }
+
+  /// Return crossAxis count for GridView.
+  int _getCrossAxisCount() {
+    final screenWidth = MediaQuery.of(context).size.width;
+    if (screenWidth < 400) return 2;
+    if (screenWidth < 600) return 3;
+    if (screenWidth < 800) return 4;
+    return 5;
   }
 }
 
