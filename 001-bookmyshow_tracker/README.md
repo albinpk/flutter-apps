@@ -1,3 +1,5 @@
+#### ⚠️ This repository has been moved to [albinpk/bookmyshow-tracker](https://github.com/albinpk/bookmyshow-tracker#readme)
+
 <h1 align="center">
 <img src="./assets/icons/icon.png"/>
 <br>
