@@ -10,7 +10,7 @@ Flutter Apps
 </p>
 </h1>
 
-## [Todo](./000-todo#readme)
+## [Todo](https://github.com/albinpk/flutter-todo#readme)
 
 A simple todo app in flutter (work in progress).
 
@@ -18,7 +18,7 @@ A simple todo app in flutter (work in progress).
 | :-----: | :---: | :-: |
 |    ✔    |   ✔   |  ✔  |
 
-## [BookMyShow Tracker](./001-bookmyshow_tracker#readme)
+## [BookMyShow Tracker](https://github.com/albinpk/bookmyshow-tracker#readme)
 
 When ticket sales for a particular movie or movies on [bookmyshow.com](https://in.bookmyshow.com) begin, **BookMyShow Tracker** will let you know.
 
